@@ -15,5 +15,7 @@ public final class DataGenerators {
     static void gatherData(GatherDataEvent.Client event) {
         event.createProvider(ModLanguageProvider::new);
         event.createProvider(ModJaJpLanguageProvider::new);
+        event.createProvider(ModModelProvider::new);
+        event.createProvider(ModRecipeProvider.Runner::new);
     }
 }

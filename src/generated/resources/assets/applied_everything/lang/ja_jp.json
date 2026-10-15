@@ -1,3 +1,6 @@
 {
+  "item.applied_everything.blank_infinity_cell": "空の無限セル",
+  "item.applied_everything.compressed_singularity": "圧縮特異点",
+  "item.applied_everything.infinity_core": "無限コア",
   "itemGroup.applied_everything": "Applied Everything"
 }

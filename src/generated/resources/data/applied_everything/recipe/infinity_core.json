@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "applied_everything:compressed_singularity",
+    "N": "minecraft:nether_star"
+  },
+  "pattern": [
+    "CCC",
+    "CNC",
+    "CCC"
+  ],
+  "result": {
+    "id": "applied_everything:infinity_core"
+  }
+}

@@ -1,3 +1,6 @@
 {
+  "item.applied_everything.blank_infinity_cell": "Blank Infinity Cell",
+  "item.applied_everything.compressed_singularity": "Compressed Singularity",
+  "item.applied_everything.infinity_core": "Infinity Core",
   "itemGroup.applied_everything": "Applied Everything"
 }

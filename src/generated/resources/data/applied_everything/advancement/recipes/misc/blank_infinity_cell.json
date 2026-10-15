@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infinity_core": {
+      "conditions": {
+        "items": [
+          {
+            "items": "applied_everything:infinity_core"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "applied_everything:blank_infinity_cell"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infinity_core"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "applied_everything:blank_infinity_cell"
+    ]
+  }
+}
