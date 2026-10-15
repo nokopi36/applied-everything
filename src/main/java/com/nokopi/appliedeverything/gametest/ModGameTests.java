@@ -5,16 +5,20 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.nokopi.appliedeverything.AppliedEverything;
+import com.nokopi.appliedeverything.ModBlocks;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellInventory;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
+import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -30,6 +34,8 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -45,6 +51,8 @@ public final class ModGameTests {
             () -> ModGameTests::imprintRules);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINT_RECIPE = TEST_FUNCTIONS.register("imprint_recipe",
             () -> ModGameTests::imprintRecipe);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_POWER = TEST_FUNCTIONS.register("compressor_power",
+            () -> ModGameTests::compressorPower);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -64,6 +72,8 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(IMPRINT_RULES.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("imprint_recipe"),
                 new FunctionGameTestInstance(IMPRINT_RECIPE.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("compressor_power"),
+                new FunctionGameTestInstance(COMPRESSOR_POWER.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
     }
 
     static void infinityCellStorage(GameTestHelper helper) {
@@ -136,6 +146,31 @@ public final class ModGameTests {
         helper.assertFalse(recipe.matches(grid(blank, blank.copy()), level), "Two blank cells should not match");
         helper.assertFalse(recipe.matches(grid(diamond), level), "Diamond alone should not match");
         helper.assertFalse(recipe.matches(grid(blank, new ItemStack(ModItems.INFINITY_CORE.get())), level), "Own items should not match");
+
+        helper.succeed();
+    }
+
+    static void compressorPower(GameTestHelper helper) {
+        var pos = new BlockPos(0, 1, 0);
+        helper.setBlock(pos, ModBlocks.SINGULARITY_COMPRESSOR.get());
+        var be = helper.getBlockEntity(pos, SingularityCompressorBlockEntity.class);
+        helper.assertValueEqual(be.getInternalMaxPower(), SingularityCompressorBlockEntity.BUFFER_SIZE, "buffer size");
+
+        be.injectAEPower(5_000, Actionable.MODULATE);
+        helper.assertValueEqual(be.getInternalCurrentPower(), 5_000.0, "AE after injecting 5,000 AE");
+
+        // FE arrives through the energy capability, converted at AE2's default rate of 2 FE = 1 AE
+        var energy = helper.getLevel().getCapability(Capabilities.Energy.BLOCK, helper.absolutePos(pos), Direction.UP);
+        helper.assertTrue(energy != null, "Compressor should expose an energy handler");
+        try (var tx = Transaction.openRoot()) {
+            helper.assertValueEqual(energy.insert(4_000, tx), 4_000, "FE accepted");
+            tx.commit();
+        }
+        helper.assertValueEqual(be.getInternalCurrentPower(), 7_000.0, "AE after injecting 4,000 FE");
+
+        // The buffer never exceeds its size
+        be.injectAEPower(1_000_000, Actionable.MODULATE);
+        helper.assertValueEqual(be.getInternalCurrentPower(), SingularityCompressorBlockEntity.BUFFER_SIZE, "AE after overfilling");
 
         helper.succeed();
     }

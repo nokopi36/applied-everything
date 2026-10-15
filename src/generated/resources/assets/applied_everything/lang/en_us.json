@@ -1,10 +1,12 @@
 {
+  "block.applied_everything.singularity_compressor": "Singularity Compressor",
   "item.applied_everything.blank_infinity_cell": "Blank Infinity Cell",
   "item.applied_everything.compressed_singularity": "Compressed Singularity",
   "item.applied_everything.infinity_cell": "Infinity Cell",
   "item.applied_everything.infinity_cell.imprinted": "Infinity Cell: %s",
   "item.applied_everything.infinity_core": "Infinity Core",
   "itemGroup.applied_everything": "Applied Everything",
+  "message.applied_everything.singularity_compressor.stored": "Stored: %s / %s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "Not imprinted",
   "tooltip.applied_everything.infinity_cell.supply": "Unlimited supply",
   "tooltip.applied_everything.infinity_cell.void": "Inserted items are voided"

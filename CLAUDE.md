@@ -35,5 +35,5 @@
 ## 利用範囲とライセンス
 - 公開予定（Modrinth / CurseForge）。コードは MIT（`LICENSE`）、`assets/applied_everything/` 以下は CC BY-NC-SA 3.0（`LICENSE-ASSETS`）。
 - AE2 のテクスチャを元にしてよい（AE2 のアセットも CC BY-NC-SA 3.0）。元にしたファイルは `LICENSE-ASSETS` の一覧に追記する。AE2 の**コード**はコピーしない。
-- セルのテクスチャは `tools/derive_cell_textures.py`（Pillow 必須、AE2 の 1k セルの帯を塗り替え）、特異点と無限コアは `tools/generate_placeholder_textures.py` で生成。
+- AE2 由来のテクスチャ（セル、特異点圧縮機）は `tools/derive_ae2_textures.py`（Pillow 必須、AE2 の画像を塗り替え）、特異点と無限コアは `tools/generate_placeholder_textures.py` で生成。
 - Modrinth は AI 生成コードがかなりの部分を占める場合に申告が必要（2026-08〜）。公開前に最新ルールを確認する。
