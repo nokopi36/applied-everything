@@ -2,7 +2,9 @@ package com.nokopi.appliedeverything.datagen;
 
 import java.util.concurrent.CompletableFuture;
 
+import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModItems;
+import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
@@ -13,6 +15,7 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.world.item.Items;
 
 public class ModRecipeProvider extends RecipeProvider {
@@ -51,6 +54,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('H', AEItems.ITEM_CELL_HOUSING)
                 .unlockedBy("has_infinity_core", this.has(ModItems.INFINITY_CORE.get()))
                 .save(this.output);
+
+        SpecialRecipeBuilder.special(() -> ImprintRecipe.INSTANCE)
+                .save(this.output, AppliedEverything.MODID + ":imprint");
     }
 
     public static class Runner extends RecipeProvider.Runner {

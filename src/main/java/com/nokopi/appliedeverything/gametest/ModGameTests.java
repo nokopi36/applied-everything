@@ -1,17 +1,24 @@
 package com.nokopi.appliedeverything.gametest;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellInventory;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
+import com.nokopi.appliedeverything.imprint.ImprintRecipe;
+import com.nokopi.appliedeverything.imprint.ImprintRules;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.gametest.framework.FunctionGameTestInstance;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.TestData;
@@ -19,6 +26,9 @@ import net.minecraft.gametest.framework.TestEnvironmentDefinition;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -31,6 +41,10 @@ public final class ModGameTests {
 
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> INFINITY_CELL_STORAGE = TEST_FUNCTIONS.register("infinity_cell_storage",
             () -> ModGameTests::infinityCellStorage);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINT_RULES = TEST_FUNCTIONS.register("imprint_rules",
+            () -> ModGameTests::imprintRules);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINT_RECIPE = TEST_FUNCTIONS.register("imprint_recipe",
+            () -> ModGameTests::imprintRecipe);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -46,6 +60,10 @@ public final class ModGameTests {
         var environment = event.registerEnvironment(id("default"), new TestEnvironmentDefinition.AllOf());
         event.registerTest(id("infinity_cell_storage"),
                 new FunctionGameTestInstance(INFINITY_CELL_STORAGE.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("imprint_rules"),
+                new FunctionGameTestInstance(IMPRINT_RULES.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("imprint_recipe"),
+                new FunctionGameTestInstance(IMPRINT_RECIPE.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
     }
 
     static void infinityCellStorage(GameTestHelper helper) {
@@ -76,5 +94,57 @@ public final class ModGameTests {
         helper.assertFalse(inv.canFitInsideCell(), "Infinity cell should not fit inside other cells");
 
         helper.succeed();
+    }
+
+    static void imprintRules(GameTestHelper helper) {
+        for (var item : List.of(Items.COBBLESTONE, Items.NETHER_STAR, Items.SHULKER_BOX, Items.DIAMOND_PICKAXE)) {
+            helper.assertTrue(ImprintRules.canImprint(new ItemStack(item)), "Should be imprintable: " + item);
+        }
+
+        var renamed = new ItemStack(Items.COBBLESTONE);
+        renamed.set(DataComponents.CUSTOM_NAME, Component.literal("Renamed"));
+        var damaged = new ItemStack(Items.DIAMOND_PICKAXE);
+        damaged.setDamageValue(10);
+        var enchanted = new ItemStack(Items.DIAMOND_SWORD);
+        enchanted.enchant(helper.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SHARPNESS), 1);
+        var filledShulker = new ItemStack(Items.SHULKER_BOX);
+        filledShulker.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(List.of(new ItemStack(Items.NETHER_STAR, 64))));
+
+        var rejected = List.of(ItemStack.EMPTY, new ItemStack(ModItems.INFINITY_CORE.get()), new ItemStack(ModItems.BLANK_INFINITY_CELL.get()),
+                InfinityCellItem.imprinted(AEItemKey.of(Items.DIAMOND)), renamed, damaged, enchanted, filledShulker);
+        for (var stack : rejected) {
+            helper.assertFalse(ImprintRules.canImprint(stack), "Should not be imprintable: " + stack);
+        }
+
+        helper.succeed();
+    }
+
+    static void imprintRecipe(GameTestHelper helper) {
+        var level = helper.getLevel();
+        var recipe = ImprintRecipe.INSTANCE;
+        var blank = new ItemStack(ModItems.BLANK_INFINITY_CELL.get());
+        var diamond = new ItemStack(Items.DIAMOND);
+
+        // Shapeless: any positions in the grid
+        var input = grid(ItemStack.EMPTY, diamond, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, blank, ItemStack.EMPTY, ItemStack.EMPTY);
+        helper.assertTrue(recipe.matches(input, level), "Blank cell + diamond should match");
+        var result = recipe.assemble(input);
+        helper.assertTrue(result.is(ModItems.INFINITY_CELL.get()), "Result should be an Infinity Cell");
+        helper.assertValueEqual(InfinityCellItem.getImprintedItem(result), AEItemKey.of(Items.DIAMOND), "imprinted item");
+
+        helper.assertFalse(recipe.matches(grid(blank, diamond, new ItemStack(Items.COBBLESTONE)), level), "Three items should not match");
+        helper.assertFalse(recipe.matches(grid(blank, blank.copy()), level), "Two blank cells should not match");
+        helper.assertFalse(recipe.matches(grid(diamond), level), "Diamond alone should not match");
+        helper.assertFalse(recipe.matches(grid(blank, new ItemStack(ModItems.INFINITY_CORE.get())), level), "Own items should not match");
+
+        helper.succeed();
+    }
+
+    private static CraftingInput grid(ItemStack... stacks) {
+        var items = new ArrayList<>(List.of(stacks));
+        while (items.size() < 9) {
+            items.add(ItemStack.EMPTY);
+        }
+        return CraftingInput.of(3, 3, items);
     }
 }
