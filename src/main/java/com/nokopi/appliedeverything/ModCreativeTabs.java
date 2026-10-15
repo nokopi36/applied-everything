@@ -1,8 +1,12 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.cell.InfinityCellItem;
+
+import appeng.api.stacks.AEItemKey;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -14,7 +18,14 @@ public final class ModCreativeTabs {
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN = CREATIVE_MODE_TABS.register("main", () -> CreativeModeTab.builder()
             .title(Component.translatable(TAB_TITLE_KEY))
             .icon(() -> ModItems.BLANK_INFINITY_CELL.get().getDefaultInstance())
-            .displayItems((parameters, output) -> ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get())))
+            .displayItems((parameters, output) -> {
+                output.accept(ModItems.COMPRESSED_SINGULARITY.get());
+                output.accept(ModItems.INFINITY_CORE.get());
+                output.accept(ModItems.BLANK_INFINITY_CELL.get());
+                // Pre-imprinted samples for testing. Remove once imprinting is craftable.
+                output.accept(InfinityCellItem.imprinted(AEItemKey.of(Items.DIAMOND)));
+                output.accept(InfinityCellItem.imprinted(AEItemKey.of(Items.COBBLESTONE)));
+            })
             .build());
 
     private ModCreativeTabs() {

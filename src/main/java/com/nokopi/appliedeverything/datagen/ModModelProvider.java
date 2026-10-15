@@ -19,5 +19,6 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.COMPRESSED_SINGULARITY.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.INFINITY_CORE.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BLANK_INFINITY_CELL.get(), ModelTemplates.FLAT_ITEM);
+        itemModels.generateFlatItem(ModItems.INFINITY_CELL.get(), ModelTemplates.FLAT_ITEM);
     }
 }

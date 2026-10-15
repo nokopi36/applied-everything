@@ -1,5 +1,7 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.cell.InfinityCellItem;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -14,6 +16,8 @@ public final class ModItems {
             p -> p.rarity(Rarity.RARE));
     public static final DeferredItem<Item> BLANK_INFINITY_CELL = ITEMS.registerSimpleItem("blank_infinity_cell",
             p -> p.stacksTo(1).rarity(Rarity.EPIC));
+    public static final DeferredItem<InfinityCellItem> INFINITY_CELL = ITEMS.registerItem("infinity_cell",
+            InfinityCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC));
 
     private ModItems() {
     }
