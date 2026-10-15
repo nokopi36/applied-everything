@@ -6,6 +6,7 @@
 - Minecraft 26.1.2 / NeoForge 26.1.2.116 / Java 25
 - mod_id: `applied_everything` / パッケージ: `com.nokopi.appliedeverything` / 作者: nokopi
 - 連携 MOD: Applied Energistics 2 26.1.13-beta（必須、Maven Central `org.appliedenergistics:appliedenergistics2`）、GuideME 26.1.15-beta（必須、Maven Central `org.appliedenergistics:guideme`）
+- 開発時のみ: JEI 29.47.0.109（`localRuntime`。`runClient` に入るが、公開する MOD の依存にはならない。maven.blamejared.com）
 - ビルド: PATH の `java` は 1.8 なので、`JAVA_HOME` に Gradle が取得した JDK 25 を指定して実行する
   `export JAVA_HOME="$HOME/.gradle/jdks/eclipse_adoptium-25-amd64-windows.2" && ./gradlew build`
 - Gradle Wrapper: jar は公式 8.14 系と一致を確認済み（配布 URL は 9.2.1、`distributionSha256Sum` で固定）
@@ -32,6 +33,6 @@
 - 言語ファイルは `en_us.json` と `ja_jp.json` の両方を更新する。可能な限りデータ生成で出力する。
 
 ## 利用範囲とライセンス
-- 公開予定（Modrinth / CurseForge）。ライセンスは未決定のため暫定で `All Rights Reserved`。
+- 公開予定（Modrinth / CurseForge）。ライセンスは MIT（`LICENSE`）。
 - AE2 のアセット（テクスチャ等）を流用しない。AE2 の API は AE2 のライセンスに従って利用する。
 - Modrinth は AI 生成コードがかなりの部分を占める場合に申告が必要（2026-08〜）。公開前に最新ルールを確認する。

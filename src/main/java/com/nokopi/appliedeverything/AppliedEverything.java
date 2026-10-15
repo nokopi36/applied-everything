@@ -14,5 +14,7 @@ public class AppliedEverything {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public AppliedEverything(IEventBus modEventBus, ModContainer modContainer) {
+        ModItems.ITEMS.register(modEventBus);
+        ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
     }
 }
