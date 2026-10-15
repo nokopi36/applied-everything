@@ -1,7 +1,8 @@
 Applied Everything - License for assets
 
-All assets in src/main/resources/assets/applied_everything/ (textures, models, language files
-and other resources) are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike
+All assets in src/main/resources/assets/applied_everything/ and
+src/main/resources/assets/ae2/screens/applied_everything/ (textures, models, language files, screen
+layouts and other resources) are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike
 3.0 Unported License (CC BY-NC-SA 3.0).
 
   https://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -19,3 +20,4 @@ Derived textures (changes: recoloured):
   textures/block/singularity_compressor_side.png    - based on AE2's condenser.png
   textures/block/singularity_compressor_top.png     - based on AE2's io_port_top.png
   textures/block/singularity_compressor_bottom.png  - based on AE2's io_port_top.png
+  textures/gui/singularity_compressor.png           - based on AE2's guis/inscriber.png (press slots removed, centred)

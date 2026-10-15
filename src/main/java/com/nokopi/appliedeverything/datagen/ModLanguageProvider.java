@@ -3,7 +3,6 @@ package com.nokopi.appliedeverything.datagen;
 import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModBlocks;
 import com.nokopi.appliedeverything.ModCreativeTabs;
-import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 
@@ -23,7 +22,6 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BLANK_INFINITY_CELL, "Blank Infinity Cell");
         addItem(ModItems.INFINITY_CELL, "Infinity Cell");
         addBlock(ModBlocks.SINGULARITY_COMPRESSOR, "Singularity Compressor");
-        add(SingularityCompressorBlock.STORED_ENERGY_KEY, "Stored: %s / %s AE");
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "Infinity Cell: %s");
         add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "Unlimited supply");
         add(InfinityCellItem.TOOLTIP_VOID_KEY, "Inserted items are voided");

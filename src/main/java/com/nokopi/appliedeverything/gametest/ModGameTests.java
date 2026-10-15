@@ -17,6 +17,7 @@ import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
+import appeng.core.definitions.AEItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -53,6 +54,8 @@ public final class ModGameTests {
             () -> ModGameTests::imprintRecipe);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_POWER = TEST_FUNCTIONS.register("compressor_power",
             () -> ModGameTests::compressorPower);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_PROCESSING = TEST_FUNCTIONS.register("compressor_processing",
+            () -> ModGameTests::compressorProcessing);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -74,6 +77,8 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(IMPRINT_RECIPE.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("compressor_power"),
                 new FunctionGameTestInstance(COMPRESSOR_POWER.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("compressor_processing"),
+                new FunctionGameTestInstance(COMPRESSOR_PROCESSING.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
     }
 
     static void infinityCellStorage(GameTestHelper helper) {
@@ -154,7 +159,8 @@ public final class ModGameTests {
         var pos = new BlockPos(0, 1, 0);
         helper.setBlock(pos, ModBlocks.SINGULARITY_COMPRESSOR.get());
         var be = helper.getBlockEntity(pos, SingularityCompressorBlockEntity.class);
-        helper.assertValueEqual(be.getInternalMaxPower(), SingularityCompressorBlockEntity.BUFFER_SIZE, "buffer size");
+        var bufferSize = SingularityCompressorBlockEntity.BASE_DRAW_PER_TICK * SingularityCompressorBlockEntity.BUFFER_TICKS;
+        helper.assertValueEqual(be.getInternalMaxPower(), bufferSize, "buffer size");
 
         be.injectAEPower(5_000, Actionable.MODULATE);
         helper.assertValueEqual(be.getInternalCurrentPower(), 5_000.0, "AE after injecting 5,000 AE");
@@ -170,9 +176,60 @@ public final class ModGameTests {
 
         // The buffer never exceeds its size
         be.injectAEPower(1_000_000, Actionable.MODULATE);
-        helper.assertValueEqual(be.getInternalCurrentPower(), SingularityCompressorBlockEntity.BUFFER_SIZE, "AE after overfilling");
+        helper.assertValueEqual(be.getInternalCurrentPower(), bufferSize, "AE after overfilling");
 
         helper.succeed();
+    }
+
+    static void compressorProcessing(GameTestHelper helper) {
+        // Without cards: 10,000,000 AE at 5,000 AE/t = 2,000 ticks
+        helper.assertValueEqual(ticksToCompress(helper, new BlockPos(0, 1, 0), 0), 2_000, "ticks without cards");
+        // With four cards: 25,000 AE/t = 400 ticks, still 10,000,000 AE in total
+        helper.assertValueEqual(ticksToCompress(helper, new BlockPos(2, 1, 0), 4), 400, "ticks with four cards");
+
+        // Eight singularities are not enough: nothing is consumed
+        var pos = new BlockPos(4, 1, 0);
+        helper.setBlock(pos, ModBlocks.SINGULARITY_COMPRESSOR.get());
+        var be = helper.getBlockEntity(pos, SingularityCompressorBlockEntity.class);
+        be.getInput().setItemDirect(0, AEItems.SINGULARITY.stack(8));
+        for (int i = 0; i < 10; i++) {
+            be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
+            be.serverTick();
+        }
+        helper.assertValueEqual(be.getConsumedEnergy(), 0.0, "energy consumed with 8 singularities");
+        helper.assertTrue(be.getOutput().getStackInSlot(0).isEmpty(), "No output with 8 singularities");
+
+        // Taking a singularity out mid-way resets the progress
+        be.getInput().insertItem(0, AEItems.SINGULARITY.stack(1), false);
+        for (int i = 0; i < 10; i++) {
+            be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
+            be.serverTick();
+        }
+        helper.assertTrue(be.getConsumedEnergy() > 0, "Compressor should be working with 9 singularities");
+        be.getInput().extractItem(0, 1, false);
+        helper.assertValueEqual(be.getConsumedEnergy(), 0.0, "energy consumed after taking a singularity out");
+
+        helper.succeed();
+    }
+
+    /** Runs a compressor with 9 singularities and unlimited buffered power, returning the ticks until it produces. */
+    private static int ticksToCompress(GameTestHelper helper, BlockPos pos, int cards) {
+        helper.setBlock(pos, ModBlocks.SINGULARITY_COMPRESSOR.get());
+        var be = helper.getBlockEntity(pos, SingularityCompressorBlockEntity.class);
+        if (cards > 0) {
+            be.getUpgrades().addItems(AEItems.SPEED_CARD.stack(cards));
+        }
+        be.getInput().setItemDirect(0, AEItems.SINGULARITY.stack(9));
+        for (int tick = 1; tick <= 10_000; tick++) {
+            be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
+            be.serverTick();
+            if (!be.getOutput().getStackInSlot(0).isEmpty()) {
+                helper.assertValueEqual(be.getOutput().getStackInSlot(0).getCount(), 1, "compressed singularities");
+                helper.assertTrue(be.getInput().getStackInSlot(0).isEmpty(), "All 9 singularities should be used");
+                return tick;
+            }
+        }
+        throw helper.assertionException("Compressor never produced output");
     }
 
     private static CraftingInput grid(ItemStack... stacks) {

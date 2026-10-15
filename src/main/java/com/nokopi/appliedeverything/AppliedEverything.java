@@ -6,8 +6,11 @@ import com.mojang.logging.LogUtils;
 
 import com.nokopi.appliedeverything.cell.InfinityCellHandler;
 import com.nokopi.appliedeverything.gametest.ModGameTests;
+import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.api.storage.StorageCells;
+import appeng.api.upgrades.Upgrades;
+import appeng.core.definitions.AEItems;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -23,6 +26,7 @@ public class AppliedEverything {
         ModBlocks.BLOCKS.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+        ModMenus.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         ModGameTests.TEST_FUNCTIONS.register(modEventBus);
@@ -32,5 +36,7 @@ public class AppliedEverything {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         StorageCells.addCellHandler(InfinityCellHandler.INSTANCE);
+        Upgrades.add(AEItems.SPEED_CARD, ModBlocks.SINGULARITY_COMPRESSOR.get(),
+                SingularityCompressorBlockEntity.MAX_ACCELERATION_CARDS);
     }
 }

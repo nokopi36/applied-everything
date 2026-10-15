@@ -2,6 +2,8 @@
 
 - Infinity Cells: AE2's creative storage cell with the band recoloured
 - Singularity Compressor: AE2's condenser (sides) and IO port top (top/bottom) with blue recoloured
+- Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
+  and the rest moved to the centre
 
 The results are derivative works of AE2's assets and are licensed under CC BY-NC-SA 3.0
 (see LICENSE-ASSETS). Requires Pillow.
@@ -12,7 +14,7 @@ Usage: python tools/derive_ae2_textures.py <ae2_textures_dir> <output_textures_d
 """
 import sys
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 # The creative cell's casing is thicker than the regular cells, which sets the Infinity Cell apart
 CELL_SOURCE = 'item/creative_storage_cell.png'
@@ -48,6 +50,29 @@ def recolour(src, mapping):
     return im
 
 
+# Areas of AE2's inscriber GUI covering the top/bottom press slots and the arrows joining them (x0, y0, x1, y1)
+INSCRIBER_PRESS_AREAS = [(36, 20, 57, 41), (36, 52, 57, 73), (58, 20, 77, 35), (58, 58, 77, 73)]
+
+
+# The remaining input slot, arrow, output slot and progress bar (x0, y0, x1, y1), and how far to move them
+# left so they sit in the middle of the 176 px wide panel
+INSCRIBER_MACHINE_AREA = (60, 35, 140, 60)
+CENTERING_SHIFT = -12
+
+
+def compressor_gui(src):
+    im = Image.open(src).convert('RGBA')
+    background = im.getpixel((20, 30))
+    draw = ImageDraw.Draw(im)
+    for area in INSCRIBER_PRESS_AREAS:
+        draw.rectangle(area, fill=background)
+    x0, y0, x1, y1 = INSCRIBER_MACHINE_AREA
+    machine = im.crop((x0, y0, x1 + 1, y1 + 1))
+    draw.rectangle(INSCRIBER_MACHINE_AREA, fill=background)
+    im.paste(machine, (x0 + CENTERING_SHIFT, y0))
+    return im
+
+
 def main():
     ae2_dir, out_dir = sys.argv[1], sys.argv[2]
     cell = f'{ae2_dir}/{CELL_SOURCE}'
@@ -59,6 +84,8 @@ def main():
     side.save(f'{out_dir}/block/singularity_compressor_side.png')
     top.save(f'{out_dir}/block/singularity_compressor_top.png')
     top.save(f'{out_dir}/block/singularity_compressor_bottom.png')
+
+    compressor_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/singularity_compressor.png')
 
 
 if __name__ == '__main__':

@@ -1,8 +1,9 @@
 package com.nokopi.appliedeverything.machine;
 
 import appeng.block.AEBaseEntityBlock;
+import appeng.menu.MenuOpener;
+import appeng.menu.locator.MenuLocators;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -10,13 +11,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class SingularityCompressorBlock extends AEBaseEntityBlock<SingularityCompressorBlockEntity> {
-    public static final String STORED_ENERGY_KEY = "message.applied_everything.singularity_compressor.stored";
-
     public SingularityCompressorBlock(Properties props) {
         super(props);
     }
 
-    // TODO: Replace with the GUI in step (b)
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player,
             BlockHitResult hitResult) {
@@ -25,9 +23,7 @@ public class SingularityCompressorBlock extends AEBaseEntityBlock<SingularityCom
             return super.useWithoutItem(state, level, pos, player, hitResult);
         }
         if (!level.isClientSide()) {
-            player.sendSystemMessage(Component.translatable(STORED_ENERGY_KEY,
-                    String.format("%,.0f", be.getInternalCurrentPower()),
-                    String.format("%,.0f", be.getInternalMaxPower())));
+            MenuOpener.open(SingularityCompressorMenu.TYPE, player, MenuLocators.forBlockEntity(be));
         }
         return InteractionResult.SUCCESS;
     }

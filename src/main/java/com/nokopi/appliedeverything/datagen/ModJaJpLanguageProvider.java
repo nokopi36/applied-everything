@@ -3,7 +3,6 @@ package com.nokopi.appliedeverything.datagen;
 import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModBlocks;
 import com.nokopi.appliedeverything.ModCreativeTabs;
-import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 
@@ -23,7 +22,6 @@ public class ModJaJpLanguageProvider extends LanguageProvider {
         addItem(ModItems.BLANK_INFINITY_CELL, "空の無限セル");
         addItem(ModItems.INFINITY_CELL, "無限セル");
         addBlock(ModBlocks.SINGULARITY_COMPRESSOR, "特異点圧縮機");
-        add(SingularityCompressorBlock.STORED_ENERGY_KEY, "蓄電: %s / %s AE");
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "無限セル: %s");
         add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "いくらでも取り出せます");
         add(InfinityCellItem.TOOLTIP_VOID_KEY, "入れたアイテムは消滅します");

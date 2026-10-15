@@ -27,13 +27,7 @@ public class ModRecipeProvider extends RecipeProvider {
     protected void buildRecipes() {
         var items = this.registries.lookupOrThrow(Registries.ITEM);
 
-        ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.COMPRESSED_SINGULARITY.get())
-                .pattern("XXX")
-                .pattern("XXX")
-                .pattern("XXX")
-                .define('X', AEItems.SINGULARITY)
-                .unlockedBy("has_singularity", this.has(AEItems.SINGULARITY))
-                .save(this.output);
+        // Compressed Singularities are made only in the Singularity Compressor
 
         ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.INFINITY_CORE.get())
                 .pattern("CCC")

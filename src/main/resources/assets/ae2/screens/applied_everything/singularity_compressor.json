@@ -1,0 +1,54 @@
+{
+  "includes": [
+    "../common/common.json",
+    "../common/player_inventory.json",
+    "../common/toolbox.json"
+  ],
+  "background": {
+    "texture": "applied_everything:textures/gui/singularity_compressor.png",
+    "srcRect": [
+      0,
+      0,
+      176,
+      178
+    ]
+  },
+  "slots": {
+    "MACHINE_INPUT": {
+      "left": 51,
+      "top": 39
+    },
+    "MACHINE_OUTPUT": {
+      "left": 101,
+      "top": 40
+    }
+  },
+  "text": {
+    "dialog_title": {
+      "text": {
+        "translate": "block.applied_everything.singularity_compressor"
+      },
+      "position": {
+        "left": 8,
+        "top": 6
+      }
+    }
+  },
+  "images": {
+    "progressBar": {
+      "texture": "applied_everything:textures/gui/singularity_compressor.png",
+      "srcRect": [
+        176,
+        0,
+        6,
+        18
+      ]
+    }
+  },
+  "widgets": {
+    "progressBar": {
+      "left": 123,
+      "top": 39
+    }
+  }
+}
