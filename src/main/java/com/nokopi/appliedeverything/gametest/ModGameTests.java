@@ -36,6 +36,7 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
@@ -56,6 +57,8 @@ public final class ModGameTests {
             () -> ModGameTests::compressorPower);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_PROCESSING = TEST_FUNCTIONS.register("compressor_processing",
             () -> ModGameTests::compressorProcessing);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_AUTOMATION = TEST_FUNCTIONS.register("compressor_automation",
+            () -> ModGameTests::compressorAutomation);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -79,6 +82,8 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(COMPRESSOR_POWER.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("compressor_processing"),
                 new FunctionGameTestInstance(COMPRESSOR_PROCESSING.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("compressor_automation"),
+                new FunctionGameTestInstance(COMPRESSOR_AUTOMATION.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
     }
 
     static void infinityCellStorage(GameTestHelper helper) {
@@ -208,6 +213,30 @@ public final class ModGameTests {
         helper.assertTrue(be.getConsumedEnergy() > 0, "Compressor should be working with 9 singularities");
         be.getInput().extractItem(0, 1, false);
         helper.assertValueEqual(be.getConsumedEnergy(), 0.0, "energy consumed after taking a singularity out");
+
+        helper.succeed();
+    }
+
+    static void compressorAutomation(GameTestHelper helper) {
+        var pos = new BlockPos(0, 1, 0);
+        helper.setBlock(pos, ModBlocks.SINGULARITY_COMPRESSOR.get());
+        var be = helper.getBlockEntity(pos, SingularityCompressorBlockEntity.class);
+        var items = helper.getLevel().getCapability(Capabilities.Item.BLOCK, helper.absolutePos(pos), Direction.NORTH);
+        helper.assertTrue(items != null, "Compressor should expose an item handler");
+
+        var singularity = ItemResource.of(AEItems.SINGULARITY);
+        var compressed = ItemResource.of(ModItems.COMPRESSED_SINGULARITY.get());
+        be.getOutput().setItemDirect(0, new ItemStack(ModItems.COMPRESSED_SINGULARITY.get(), 3));
+
+        try (var tx = Transaction.openRoot()) {
+            helper.assertValueEqual(items.insert(singularity, 16, tx), 16, "singularities inserted");
+            helper.assertValueEqual(items.insert(ItemResource.of(Items.COBBLESTONE), 16, tx), 0, "cobblestone inserted");
+            helper.assertValueEqual(items.extract(singularity, 16, tx), 0, "singularities extracted");
+            helper.assertValueEqual(items.extract(compressed, 3, tx), 3, "compressed singularities extracted");
+            tx.commit();
+        }
+        helper.assertValueEqual(be.getInput().getStackInSlot(0).getCount(), 16, "singularities in the input");
+        helper.assertTrue(be.getOutput().getStackInSlot(0).isEmpty(), "Output should be empty");
 
         helper.succeed();
     }

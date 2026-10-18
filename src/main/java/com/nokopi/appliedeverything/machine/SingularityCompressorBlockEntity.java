@@ -16,8 +16,10 @@ import appeng.blockentity.grid.AENetworkedPoweredBlockEntity;
 import appeng.core.definitions.AEItems;
 import appeng.util.inv.AppEngInternalInventory;
 import appeng.util.inv.CombinedInternalInventory;
+import appeng.util.inv.FilteredInternalInventory;
 import appeng.util.inv.filter.IAEItemFilter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -42,6 +44,8 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
     private final AppEngInternalInventory input = new AppEngInternalInventory(this, 1, 64, new InputFilter());
     private final AppEngInternalInventory output = new AppEngInternalInventory(this, 1, 64);
     private final InternalInventory inventory = new CombinedInternalInventory(input, output);
+    /** What hoppers, pipes and AE2 buses see: insert into the input, extract from the output. */
+    private final InternalInventory automationInventory = new FilteredInternalInventory(inventory, new AutomationFilter());
     private final IUpgradeInventory upgrades;
 
     /** AE consumed towards the current compression. */
@@ -66,6 +70,11 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
     @Override
     public InternalInventory getInternalInventory() {
         return inventory;
+    }
+
+    @Override
+    protected InternalInventory getExposedInventoryForSide(Direction side) {
+        return automationInventory;
     }
 
     @Override
@@ -163,6 +172,19 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
     public void clearContent() {
         super.clearContent();
         upgrades.clear();
+    }
+
+    /** Slot 0 is the input and slot 1 the output of the combined inventory. */
+    private static class AutomationFilter implements IAEItemFilter {
+        @Override
+        public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
+            return slot == 0 && AEItems.SINGULARITY.is(stack);
+        }
+
+        @Override
+        public boolean allowExtract(InternalInventory inv, int slot, int amount) {
+            return slot == 1;
+        }
     }
 
     private static class InputFilter implements IAEItemFilter {

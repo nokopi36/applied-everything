@@ -49,6 +49,17 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_infinity_core", this.has(ModItems.INFINITY_CORE.get()))
                 .save(this.output);
 
+        ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.SINGULARITY_COMPRESSOR.get())
+                .pattern("SPS")
+                .pattern("DID")
+                .pattern("SPS")
+                .define('I', AEBlocks.INSCRIBER)
+                .define('D', AEBlocks.DENSE_ENERGY_CELL)
+                .define('P', AEItems.ENGINEERING_PROCESSOR)
+                .define('S', AEItems.SINGULARITY)
+                .unlockedBy("has_singularity", this.has(AEItems.SINGULARITY))
+                .save(this.output);
+
         SpecialRecipeBuilder.special(() -> ImprintRecipe.INSTANCE)
                 .save(this.output, AppliedEverything.MODID + ":imprint");
     }

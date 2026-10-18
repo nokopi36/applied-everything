@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": "ae2:dense_energy_cell",
+    "I": "ae2:inscriber",
+    "P": "ae2:engineering_processor",
+    "S": "ae2:singularity"
+  },
+  "pattern": [
+    "SPS",
+    "DID",
+    "SPS"
+  ],
+  "result": {
+    "id": "applied_everything:singularity_compressor"
+  }
+}

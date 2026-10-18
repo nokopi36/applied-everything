@@ -19,5 +19,7 @@ public final class ModCapabilities {
         event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, compressor, (be, context) -> (IInWorldGridNodeHost) be);
         // Accepts FE from other mods' cables
         event.registerBlockEntity(Capabilities.Energy.BLOCK, compressor, (be, side) -> be.getEnergyStorage(side));
+        // Hoppers, pipes and AE2 buses: insert singularities, extract compressed singularities
+        event.registerBlockEntity(Capabilities.Item.BLOCK, compressor, (be, side) -> be.getExposedItemHandler(side));
     }
 }
