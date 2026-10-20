@@ -1,12 +1,13 @@
 package com.nokopi.appliedeverything;
 
 import com.nokopi.appliedeverything.client.ImprinterScreen;
-import com.nokopi.appliedeverything.client.SingularityCompressorRenderer;
+import com.nokopi.appliedeverything.client.FrameMachineRenderer;
 import com.nokopi.appliedeverything.client.SingularityCompressorScreen;
 import com.nokopi.appliedeverything.machine.ImprinterMenu;
 import com.nokopi.appliedeverything.machine.SingularityCompressorMenu;
 
 import appeng.api.client.StorageCellModels;
+import appeng.core.definitions.AEItems;
 import appeng.client.InitScreens;
 import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
@@ -33,7 +34,10 @@ public class AppliedEverythingClient {
     }
 
     private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.SINGULARITY_COMPRESSOR.get(), SingularityCompressorRenderer::new);
+        event.registerBlockEntityRenderer(ModBlockEntities.SINGULARITY_COMPRESSOR.get(),
+                context -> new FrameMachineRenderer<>(context, be -> AEItems.SINGULARITY.stack()));
+        event.registerBlockEntityRenderer(ModBlockEntities.IMPRINTER.get(),
+                context -> new FrameMachineRenderer<>(context, be -> be.getCellSlot().getStackInSlot(0)));
     }
 
     private void registerScreens(RegisterMenuScreensEvent event) {

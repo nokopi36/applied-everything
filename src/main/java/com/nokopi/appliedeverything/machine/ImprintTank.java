@@ -1,6 +1,7 @@
 package com.nokopi.appliedeverything.machine;
 
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -14,10 +15,11 @@ import appeng.helpers.externalstorage.GenericStackInv;
 public class ImprintTank extends GenericStackInv {
     public static final int CAPACITY = 1000;
 
-    public ImprintTank(@Nullable Runnable listener) {
+    /** @param accepting whether the machine currently takes fluids at all (it refuses them while an item cell waits) */
+    public ImprintTank(@Nullable Runnable listener, BooleanSupplier accepting) {
         super(Set.of(AEKeyType.fluids()), listener, Mode.STORAGE, 1);
         setCapacity(AEKeyType.fluids(), CAPACITY);
-        setFilter((slot, what) -> what instanceof AEFluidKey fluid && ImprintRules.canImprint(fluid));
+        setFilter((slot, what) -> accepting.getAsBoolean() && what instanceof AEFluidKey fluid && ImprintRules.canImprint(fluid));
     }
 
     @Nullable

@@ -188,6 +188,23 @@ public final class ModGameTests {
                 AEFluidKey.of(Fluids.WATER), "imprinted fluid");
         helper.assertTrue(fluidBe.getTank().isEmpty(), "The tank should be used up");
 
+        // Inputs that do not fit the waiting blank cell are refused
+        var mixPos = new BlockPos(5, 1, 0);
+        helper.setBlock(mixPos, ModBlocks.IMPRINTER.get());
+        var mixBe = helper.getBlockEntity(mixPos, ImprinterBlockEntity.class);
+        var water = AEFluidKey.of(Fluids.WATER);
+        mixBe.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_FLUID_CELL.get()));
+        helper.assertFalse(mixBe.getItemSlot().insertItem(0, new ItemStack(Items.COBBLESTONE), false).isEmpty(),
+                "Items should be refused while a fluid cell waits");
+        mixBe.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_CELL.get()));
+        helper.assertValueEqual(mixBe.getTank().insert(0, water, 1000, Actionable.MODULATE), 0L, "water accepted while an item cell waits");
+        helper.assertFalse(mixBe.getContainerSlot().insertItem(0, new ItemStack(Items.WATER_BUCKET), false).isEmpty(),
+                "Containers should be refused while an item cell waits");
+        mixBe.getCellSlot().setItemDirect(0, ItemStack.EMPTY);
+        helper.assertTrue(mixBe.getItemSlot().insertItem(0, new ItemStack(Items.COBBLESTONE), false).isEmpty(),
+                "Items should be accepted with no cell");
+        helper.assertValueEqual(mixBe.getTank().insert(0, water, 1000, Actionable.MODULATE), 1000L, "water accepted with no cell");
+
         helper.succeed();
     }
 

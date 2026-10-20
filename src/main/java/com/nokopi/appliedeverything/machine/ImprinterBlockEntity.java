@@ -36,12 +36,12 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
 
     private final AppEngInternalInventory cellSlot = new AppEngInternalInventory(this, 1, 1, new CellFilter());
     private final AppEngInternalInventory itemSlot = new AppEngInternalInventory(this, 1, 64, new ItemFilter());
-    private final AppEngInternalInventory containerSlot = new AppEngInternalInventory(this, 1, 1);
+    private final AppEngInternalInventory containerSlot = new AppEngInternalInventory(this, 1, 1, new ContainerFilter());
     private final AppEngInternalInventory outputSlot = new AppEngInternalInventory(this, 1, 1);
     private final InternalInventory inventory = new CombinedInternalInventory(cellSlot, itemSlot, containerSlot, outputSlot);
     /** What hoppers, pipes and AE2 buses see. */
     private final InternalInventory automationInventory = new FilteredInternalInventory(inventory, new AutomationFilter());
-    private final ImprintTank tank = new ImprintTank(this::saveChanges);
+    private final ImprintTank tank = new ImprintTank(this::saveChanges, this::acceptsFluid);
 
     /** AE consumed towards the current imprint. */
     private double consumedEnergy;
@@ -84,6 +84,16 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
     @Override
     protected InternalInventory getExposedInventoryForSide(Direction side) {
         return automationInventory;
+    }
+
+    /** Items are refused while a blank fluid cell waits in the cell slot, so they cannot be put in by mistake. */
+    private boolean acceptsItem() {
+        return !cellSlot.getStackInSlot(0).is(ModItems.BLANK_INFINITY_FLUID_CELL.get());
+    }
+
+    /** Fluids are refused while a blank item cell waits in the cell slot. */
+    private boolean acceptsFluid() {
+        return !cellSlot.getStackInSlot(0).is(ModItems.BLANK_INFINITY_CELL.get());
     }
 
     /** The cell the current inputs would produce, or null if nothing can be imprinted right now. */
@@ -186,10 +196,17 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
         }
     }
 
-    private static class ItemFilter implements IAEItemFilter {
+    private class ItemFilter implements IAEItemFilter {
         @Override
         public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
-            return ImprintRules.canImprint(stack);
+            return acceptsItem() && ImprintRules.canImprint(stack);
+        }
+    }
+
+    private class ContainerFilter implements IAEItemFilter {
+        @Override
+        public boolean allowInsert(InternalInventory inv, int slot, ItemStack stack) {
+            return acceptsFluid();
         }
     }
 
