@@ -32,7 +32,8 @@ An imprint cannot be changed. The cell does not work in a <ItemLink id="ae2:cell
 
 These items cannot be imprinted:
 
-* Items from Applied Everything itself.
+* Items from Applied Everything itself, and AE2's <ItemLink id="ae2:singularity" /> (an endless supply of singularities
+  would make every further cell cost nothing but power).
 * Items that differ from their default state: enchanted items and books, renamed items, damaged tools, filled shulker
   boxes, bundles or storage cells, dyed armor, and so on.
 

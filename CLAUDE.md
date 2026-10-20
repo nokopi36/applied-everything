@@ -32,6 +32,7 @@
 - 数値は定数か config にまとめ、調整しやすくする。
 - ガイドブック（`assets/applied_everything/ae2guide/`、日本語版は `_ja_jp/`）には数値を直接書いている。数値・仕様を変えたら英語版と日本語版の両方を直す。
 - 言語ファイルは `en_us.json` と `ja_jp.json` の両方を更新する。可能な限りデータ生成で出力する。
+- モッドパック制作者向けの説明（タグなど）はガイドブックではなく README に書く。`README.md`（英語）と `README.ja.md`（日本語）は両方を直す。
 
 ## 利用範囲とライセンス
 - 公開予定（Modrinth / CurseForge）。コードは MIT（`LICENSE`）、`assets/applied_everything/` 以下は CC BY-NC-SA 3.0（`LICENSE-ASSETS`）。

@@ -131,7 +131,8 @@ public final class ModGameTests {
         filledShulker.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(List.of(new ItemStack(Items.NETHER_STAR, 64))));
 
         var rejected = List.of(ItemStack.EMPTY, new ItemStack(ModItems.INFINITY_CORE.get()), new ItemStack(ModItems.BLANK_INFINITY_CELL.get()),
-                InfinityCellItem.imprinted(AEItemKey.of(Items.DIAMOND)), renamed, damaged, enchanted, filledShulker);
+                InfinityCellItem.imprinted(AEItemKey.of(Items.DIAMOND)), new ItemStack(ModBlocks.SINGULARITY_COMPRESSOR.get()),
+                AEItems.SINGULARITY.stack(), renamed, damaged, enchanted, filledShulker);
         for (var stack : rejected) {
             helper.assertFalse(ImprintRules.canImprint(stack), "Should not be imprintable: " + stack);
         }
