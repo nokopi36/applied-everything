@@ -1,7 +1,6 @@
 """Derives textures from AE2's assets by recolouring them.
 
 - Infinity Cells: AE2's creative storage cell with the band recoloured
-- Singularity Compressor: AE2's condenser (sides) and IO port top (top/bottom) with blue recoloured
 - Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
   and the rest moved to the centre
 
@@ -27,18 +26,6 @@ INFINITY_BAND = [(112, 36, 160, 255), (176, 72, 224, 255), (255, 204, 77, 255)]
 
 # Blank Infinity Cell: the same band, unlit
 BLANK_BAND = [(52, 38, 72, 255), (72, 54, 98, 255), (92, 70, 124, 255)]
-
-# AE2's blue machine accents -> violet, and the condenser's purple core -> gold
-MACHINE_COLOURS = {
-    (112, 140, 186, 255): (120, 72, 170, 255),
-    (125, 169, 210, 255): (160, 90, 215, 255),
-    (156, 211, 255, 255): (205, 130, 250, 255),
-    (218, 255, 255, 255): (255, 225, 140, 255),
-    (145, 93, 205, 255): (255, 190, 60, 255),
-    (226, 163, 227, 255): (255, 240, 170, 255),
-    (90, 71, 158, 255): (190, 120, 30, 255),
-}
-
 
 def recolour(src, mapping):
     im = Image.open(src).convert('RGBA')
@@ -78,12 +65,6 @@ def main():
     cell = f'{ae2_dir}/{CELL_SOURCE}'
     recolour(cell, dict(zip(AE2_BAND, INFINITY_BAND))).save(f'{out_dir}/item/infinity_cell.png')
     recolour(cell, dict(zip(AE2_BAND, BLANK_BAND))).save(f'{out_dir}/item/blank_infinity_cell.png')
-
-    side = recolour(f'{ae2_dir}/block/condenser.png', MACHINE_COLOURS)
-    top = recolour(f'{ae2_dir}/block/io_port_top.png', MACHINE_COLOURS)
-    side.save(f'{out_dir}/block/singularity_compressor_side.png')
-    top.save(f'{out_dir}/block/singularity_compressor_top.png')
-    top.save(f'{out_dir}/block/singularity_compressor_bottom.png')
 
     compressor_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/singularity_compressor.png')
 

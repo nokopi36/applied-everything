@@ -11,6 +11,7 @@ import com.nokopi.appliedeverything.cell.InfinityCellInventory;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
+import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
 import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.api.config.Actionable;
@@ -253,9 +254,14 @@ public final class ModGameTests {
         for (int tick = 1; tick <= 10_000; tick++) {
             be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
             be.serverTick();
+            if (tick == 1) {
+                helper.assertTrue(be.getBlockState().getValue(SingularityCompressorBlock.WORKING), "Should show as working");
+            }
             if (!be.getOutput().getStackInSlot(0).isEmpty()) {
                 helper.assertValueEqual(be.getOutput().getStackInSlot(0).getCount(), 1, "compressed singularities");
                 helper.assertTrue(be.getInput().getStackInSlot(0).isEmpty(), "All 9 singularities should be used");
+                be.serverTick();
+                helper.assertFalse(be.getBlockState().getValue(SingularityCompressorBlock.WORKING), "Should stop working without input");
                 return tick;
             }
         }

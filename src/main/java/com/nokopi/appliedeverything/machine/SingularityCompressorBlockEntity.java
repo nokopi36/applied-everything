@@ -22,6 +22,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -120,6 +121,7 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
     @Override
     public void serverTick() {
         if (!canWork()) {
+            setWorking(false);
             return;
         }
 
@@ -133,9 +135,11 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
             }
         }
         if (got <= 0) {
+            setWorking(false);
             return;
         }
 
+        setWorking(true);
         consumedEnergy += got;
         if (consumedEnergy >= ENERGY_PER_OPERATION - 0.001) {
             consumedEnergy = 0;
@@ -143,6 +147,15 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
             output.insertItem(0, new ItemStack(ModItems.COMPRESSED_SINGULARITY.get()), false);
         }
         saveChanges();
+    }
+
+    /** Shows or hides the compression effects (glowing pyramids, floating singularity) via the block state. */
+    private void setWorking(boolean working) {
+        var state = getBlockState();
+        if (level != null && state.hasProperty(SingularityCompressorBlock.WORKING)
+                && state.getValue(SingularityCompressorBlock.WORKING) != working) {
+            level.setBlock(worldPosition, state.setValue(SingularityCompressorBlock.WORKING, working), Block.UPDATE_CLIENTS);
+        }
     }
 
     @Override

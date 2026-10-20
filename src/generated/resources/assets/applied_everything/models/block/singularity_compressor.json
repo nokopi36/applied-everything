@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "applied_everything:block/singularity_compressor_bottom",
-    "side": "applied_everything:block/singularity_compressor_side",
-    "top": "applied_everything:block/singularity_compressor_top"
-  }
-}

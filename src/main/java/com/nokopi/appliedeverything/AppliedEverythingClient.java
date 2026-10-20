@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.client.SingularityCompressorRenderer;
 import com.nokopi.appliedeverything.client.SingularityCompressorScreen;
 import com.nokopi.appliedeverything.machine.SingularityCompressorMenu;
 
@@ -9,6 +10,7 @@ import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.InitializeClientRegistriesEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
@@ -20,10 +22,15 @@ public class AppliedEverythingClient {
     public AppliedEverythingClient(IEventBus modEventBus) {
         modEventBus.addListener(this::initClientRegistries);
         modEventBus.addListener(this::registerScreens);
+        modEventBus.addListener(this::registerRenderers);
     }
 
     private void initClientRegistries(InitializeClientRegistriesEvent event) {
         StorageCellModels.registerModel(ModItems.INFINITY_CELL.get(), DRIVE_CELL_MODEL);
+    }
+
+    private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.SINGULARITY_COMPRESSOR.get(), SingularityCompressorRenderer::new);
     }
 
     private void registerScreens(RegisterMenuScreensEvent event) {

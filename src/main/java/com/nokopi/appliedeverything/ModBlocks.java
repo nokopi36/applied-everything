@@ -12,7 +12,8 @@ public final class ModBlocks {
 
     public static final DeferredBlock<SingularityCompressorBlock> SINGULARITY_COMPRESSOR = BLOCKS.registerBlock("singularity_compressor",
             SingularityCompressorBlock::new,
-            p -> p.mapColor(MapColor.METAL).strength(2.2f, 11f).requiresCorrectToolForDrops().sound(SoundType.METAL));
+            // Open frame: neighbouring faces must still be drawn
+            p -> p.mapColor(MapColor.METAL).strength(2.2f, 11f).requiresCorrectToolForDrops().sound(SoundType.METAL).noOcclusion());
 
     private ModBlocks() {
     }

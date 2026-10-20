@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "axis=z,working=false": { "model": "applied_everything:block/singularity_compressor" },
+    "axis=x,working=false": { "model": "applied_everything:block/singularity_compressor", "y": 90 },
+    "axis=z,working=true": { "model": "applied_everything:block/singularity_compressor_working" },
+    "axis=x,working=true": { "model": "applied_everything:block/singularity_compressor_working", "y": 90 }
+  }
+}

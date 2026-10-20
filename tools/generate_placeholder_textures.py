@@ -1,8 +1,8 @@
-"""Generates placeholder pixel-art textures for Applied Everything (singularity and core).
+"""Generates pixel-art textures for Applied Everything: singularity, core and the Singularity Compressor parts.
 
 The cell textures are derived from AE2 instead: see derive_cell_textures.py.
 
-Usage: python tools/generate_placeholder_textures.py src/main/resources/assets/applied_everything/textures/item <preview_png>
+Usage: python tools/generate_placeholder_textures.py src/main/resources/assets/applied_everything/textures <preview_png>
 """
 import math
 import struct
@@ -137,11 +137,49 @@ def preview(path, images, scale=16, gap=8):
     write_png(path, canvas)
 
 
+def compressor_frame():
+    """Silver casing for the compressor frame, lit from the top left like AE2's machines."""
+    rows = ['W' * 15 + 'w'] + ['W' + 'L' * 14 + 'd' for _ in range(14)] + ['w' + 'd' * 14 + 'D']
+    rows = [list(r) for r in rows]
+    for y in range(3, 13):
+        rows[y][2] = 'l'
+        rows[y][13] = 'm'
+    for x in range(2, 14):
+        rows[2][x] = 'l'
+        rows[13][x] = 'm'
+    for (x, y) in ((3, 3), (12, 3), (3, 12), (12, 12)):
+        rows[y][x] = 'O'
+    palette = {'W': hexc('#f2f2f2'), 'w': hexc('#dedfe3'), 'L': hexc('#cbccd4'), 'l': hexc('#adb0c4'),
+               'm': hexc('#9a9fb4'), 'd': hexc('#696d88'), 'D': hexc('#4d4d67'), 'O': hexc('#413f54')}
+    return from_grid([''.join(r) for r in rows], palette)
+
+
+def _pyramid(dark, mid, light):
+    # Diagonal stripes give the steps a little texture
+    px = [[CLEAR] * 16 for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            band = (x + y) % 6
+            px[y][x] = light if band == 0 else (mid if band in (1, 5) else dark)
+    return px
+
+
+def compressor_pyramid():
+    return _pyramid(hexc('#5f228c'), hexc('#7a32b0'), hexc('#9a4fd0'))
+
+
+def compressor_pyramid_lit():
+    return _pyramid(hexc('#a050e0'), hexc('#c47cf2'), hexc('#f0c8ff'))
+
+
 def main():
     out_dir, preview_path = sys.argv[1], sys.argv[2]
     textures = {
-        'compressed_singularity': compressed_singularity(),
-        'infinity_core': infinity_core(),
+        'item/compressed_singularity': compressed_singularity(),
+        'item/infinity_core': infinity_core(),
+        'block/singularity_compressor_frame': compressor_frame(),
+        'block/singularity_compressor_pyramid': compressor_pyramid(),
+        'block/singularity_compressor_pyramid_lit': compressor_pyramid_lit(),
     }
     for name, px in textures.items():
         write_png(f'{out_dir}/{name}.png', px)
