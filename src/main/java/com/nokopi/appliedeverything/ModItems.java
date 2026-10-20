@@ -2,6 +2,7 @@ package com.nokopi.appliedeverything;
 
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -15,10 +16,11 @@ public final class ModItems {
             p -> p.rarity(Rarity.UNCOMMON));
     public static final DeferredItem<Item> INFINITY_CORE = ITEMS.registerSimpleItem("infinity_core",
             p -> p.rarity(Rarity.RARE));
+    // Both cells always shimmer, so they stand out from AE2's cells even at inventory size
     public static final DeferredItem<Item> BLANK_INFINITY_CELL = ITEMS.registerSimpleItem("blank_infinity_cell",
-            p -> p.stacksTo(1).rarity(Rarity.EPIC));
+            p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final DeferredItem<InfinityCellItem> INFINITY_CELL = ITEMS.registerItem("infinity_cell",
-            InfinityCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC));
+            InfinityCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final DeferredItem<BlockItem> SINGULARITY_COMPRESSOR = ITEMS.registerSimpleBlockItem("singularity_compressor", ModBlocks.SINGULARITY_COMPRESSOR);
 
     private ModItems() {
