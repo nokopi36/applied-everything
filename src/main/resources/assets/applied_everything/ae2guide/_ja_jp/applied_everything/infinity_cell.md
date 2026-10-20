@@ -7,6 +7,8 @@ navigation:
 item_ids:
 - blank_infinity_cell
 - infinity_cell
+- blank_infinity_fluid_cell
+- infinity_fluid_cell
 ---
 
 # 無限セル
@@ -42,3 +44,18 @@ item_ids:
 * 刻印したアイテムを入れると消えます（AE2 のクリエイティブセルと同じ）。
 * ほかのアイテムは入りません。
 * ポータブルセルなど、ほかのセルの中には入れられません。
+
+## 無限流体セル
+
+<Row>
+  <ItemImage id="blank_infinity_fluid_cell" scale="4" />
+  <ItemImage id="infinity_fluid_cell" scale="4" />
+</Row>
+
+液体版の無限セルです。空の無限流体セルは、空の無限セルのアイテムセルハウジングを
+<ItemLink id="ae2:fluid_cell_housing" /> に替えて作ります。
+
+<RecipeFor id="blank_infinity_fluid_cell" />
+
+作業台に、空の無限流体セルと、液体の入った容器（水入りバケツなど）**1 個** を置くと刻印できます。
+容器は空になって戻ります。データ付きの液体は刻印できません。

@@ -18,6 +18,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.COMPRESSED_SINGULARITY.get());
                 output.accept(ModItems.INFINITY_CORE.get());
                 output.accept(ModItems.BLANK_INFINITY_CELL.get());
+                output.accept(ModItems.BLANK_INFINITY_FLUID_CELL.get());
                 output.accept(ModItems.SINGULARITY_COMPRESSOR.get());
             })
             .build());

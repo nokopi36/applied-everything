@@ -1,6 +1,7 @@
 package com.nokopi.appliedeverything;
 
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
+import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.BlockItem;
@@ -21,6 +22,10 @@ public final class ModItems {
             p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final DeferredItem<InfinityCellItem> INFINITY_CELL = ITEMS.registerItem("infinity_cell",
             InfinityCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final DeferredItem<Item> BLANK_INFINITY_FLUID_CELL = ITEMS.registerSimpleItem("blank_infinity_fluid_cell",
+            p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    public static final DeferredItem<InfinityFluidCellItem> INFINITY_FLUID_CELL = ITEMS.registerItem("infinity_fluid_cell",
+            InfinityFluidCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final DeferredItem<BlockItem> SINGULARITY_COMPRESSOR = ITEMS.registerSimpleBlockItem("singularity_compressor", ModBlocks.SINGULARITY_COMPRESSOR);
 
     private ModItems() {

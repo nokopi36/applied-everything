@@ -1,10 +1,13 @@
 {
   "block.applied_everything.singularity_compressor": "特異点圧縮機",
   "item.applied_everything.blank_infinity_cell": "空の無限セル",
+  "item.applied_everything.blank_infinity_fluid_cell": "空の無限流体セル",
   "item.applied_everything.compressed_singularity": "圧縮特異点",
   "item.applied_everything.infinity_cell": "無限セル",
   "item.applied_everything.infinity_cell.imprinted": "無限セル: %s",
   "item.applied_everything.infinity_core": "無限コア",
+  "item.applied_everything.infinity_fluid_cell": "無限流体セル",
+  "item.applied_everything.infinity_fluid_cell.imprinted": "無限流体セル: %s",
   "itemGroup.applied_everything": "Applied Everything",
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "未刻印",

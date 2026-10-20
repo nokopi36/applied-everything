@@ -50,6 +50,10 @@ NeoForge の `remove` で初期値を外します。
 /neoforge tags minecraft:item get applied_everything:imprint_blacklist
 ```
 
+液体のタグ `applied_everything:imprint_blacklist` に入っている液体は、無限流体セルに刻印できません。初期状態は空です。
+同じ方法で `data/applied_everything/tags/fluid/imprint_blacklist.json` から変更でき、
+`/neoforge tags minecraft:fluid get applied_everything:imprint_blacklist` で確認できます。
+
 通常の状態から変わっているアイテム（エンチャント、名前付き、耐久が減ったもの、中身入りの容器など）は、常に刻印できません。
 アイテムの種類ではなく状態で決まるのでタグには含まれず、解除もできません。容器の中身を増やすバグ技を防ぐためです。
 

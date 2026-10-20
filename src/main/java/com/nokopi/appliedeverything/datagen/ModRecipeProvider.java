@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModItems;
+import com.nokopi.appliedeverything.imprint.FluidImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 
 import appeng.core.definitions.AEBlocks;
@@ -60,8 +61,22 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_singularity", this.has(AEItems.SINGULARITY))
                 .save(this.output);
 
+        // Same as the blank Infinity Cell, with a fluid cell housing instead of the item cell housing
+        ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.BLANK_INFINITY_FLUID_CELL.get())
+                .pattern("CPC")
+                .pattern("PIP")
+                .pattern("CPF")
+                .define('I', ModItems.INFINITY_CORE.get())
+                .define('P', AEItems.CELL_COMPONENT_256K)
+                .define('C', ModItems.COMPRESSED_SINGULARITY.get())
+                .define('F', AEItems.FLUID_CELL_HOUSING)
+                .unlockedBy("has_infinity_core", this.has(ModItems.INFINITY_CORE.get()))
+                .save(this.output);
+
         SpecialRecipeBuilder.special(() -> ImprintRecipe.INSTANCE)
                 .save(this.output, AppliedEverything.MODID + ":imprint");
+        SpecialRecipeBuilder.special(() -> FluidImprintRecipe.INSTANCE)
+                .save(this.output, AppliedEverything.MODID + ":fluid_imprint");
     }
 
     public static class Runner extends RecipeProvider.Runner {

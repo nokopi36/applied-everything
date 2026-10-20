@@ -5,6 +5,7 @@ import com.nokopi.appliedeverything.ModBlocks;
 import com.nokopi.appliedeverything.ModCreativeTabs;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
+import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 import com.nokopi.appliedeverything.integration.jei.CompressionCategory;
 
 import net.minecraft.data.PackOutput;
@@ -24,6 +25,9 @@ public class ModJaJpLanguageProvider extends LanguageProvider {
         addItem(ModItems.INFINITY_CELL, "無限セル");
         addBlock(ModBlocks.SINGULARITY_COMPRESSOR, "特異点圧縮機");
         add(CompressionCategory.ENERGY_KEY, "%s AE");
+        addItem(ModItems.BLANK_INFINITY_FLUID_CELL, "空の無限流体セル");
+        addItem(ModItems.INFINITY_FLUID_CELL, "無限流体セル");
+        add(InfinityFluidCellItem.IMPRINTED_NAME_KEY, "無限流体セル: %s");
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "無限セル: %s");
         add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "いくらでも取り出せます");
         add(InfinityCellItem.TOOLTIP_VOID_KEY, "入れたアイテムは消滅します");

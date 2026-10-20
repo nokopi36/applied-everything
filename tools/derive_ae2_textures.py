@@ -1,6 +1,6 @@
 """Derives textures from AE2's assets by recolouring them.
 
-- Infinity Cells: AE2's creative storage cell with the band recoloured
+- Infinity Cells and Infinity Fluid Cells: AE2's creative storage cell with the band recoloured
 - Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
   and the rest moved to the centre
 
@@ -26,6 +26,10 @@ INFINITY_BAND = [(112, 36, 160, 255), (176, 72, 224, 255), (255, 204, 77, 255)]
 
 # Blank Infinity Cell: the same band, unlit
 BLANK_BAND = [(52, 38, 72, 255), (72, 54, 98, 255), (92, 70, 124, 255)]
+
+# Infinity Fluid Cell: aqua band with the same gold highlights, and its unlit blank
+FLUID_BAND = [(22, 104, 158, 255), (46, 170, 222, 255), (255, 204, 77, 255)]
+BLANK_FLUID_BAND = [(30, 48, 68, 255), (42, 68, 92, 255), (56, 88, 118, 255)]
 
 def recolour(src, mapping):
     im = Image.open(src).convert('RGBA')
@@ -65,6 +69,8 @@ def main():
     cell = f'{ae2_dir}/{CELL_SOURCE}'
     recolour(cell, dict(zip(AE2_BAND, INFINITY_BAND))).save(f'{out_dir}/item/infinity_cell.png')
     recolour(cell, dict(zip(AE2_BAND, BLANK_BAND))).save(f'{out_dir}/item/blank_infinity_cell.png')
+    recolour(cell, dict(zip(AE2_BAND, FLUID_BAND))).save(f'{out_dir}/item/infinity_fluid_cell.png')
+    recolour(cell, dict(zip(AE2_BAND, BLANK_FLUID_BAND))).save(f'{out_dir}/item/blank_infinity_fluid_cell.png')
 
     compressor_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/singularity_compressor.png')
 

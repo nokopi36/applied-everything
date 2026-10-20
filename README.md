@@ -48,6 +48,10 @@ To see the list currently in effect, including your changes:
 /neoforge tags minecraft:item get applied_everything:imprint_blacklist
 ```
 
+Fluids in the fluid tag `applied_everything:imprint_blacklist` cannot be imprinted into an Infinity Fluid Cell. It
+is empty by default; change it the same way at `data/applied_everything/tags/fluid/imprint_blacklist.json`, and check
+it with `/neoforge tags minecraft:fluid get applied_everything:imprint_blacklist`.
+
 Items that differ from their default state (enchanted, renamed, damaged, filled containers and so on) can never be
 imprinted. This depends on the item's state rather than its type, so it is not part of the tag and cannot be turned off.
 It prevents duplicating the contents of containers.

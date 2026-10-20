@@ -4,6 +4,8 @@
     "applied_everything:infinity_core",
     "applied_everything:blank_infinity_cell",
     "applied_everything:infinity_cell",
+    "applied_everything:blank_infinity_fluid_cell",
+    "applied_everything:infinity_fluid_cell",
     "applied_everything:singularity_compressor",
     "ae2:singularity"
   ]

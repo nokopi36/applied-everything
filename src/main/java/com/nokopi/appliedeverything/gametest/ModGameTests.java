@@ -9,6 +9,8 @@ import com.nokopi.appliedeverything.ModBlocks;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellInventory;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
+import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
+import com.nokopi.appliedeverything.imprint.FluidImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
 import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
@@ -16,6 +18,7 @@ import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
+import appeng.api.stacks.AEFluidKey;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
 import appeng.core.definitions.AEItems;
@@ -35,6 +38,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.transfer.item.ItemResource;
@@ -60,6 +64,8 @@ public final class ModGameTests {
             () -> ModGameTests::compressorProcessing);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_AUTOMATION = TEST_FUNCTIONS.register("compressor_automation",
             () -> ModGameTests::compressorAutomation);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLUID_CELL = TEST_FUNCTIONS.register("fluid_cell",
+            () -> ModGameTests::fluidCell);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -85,6 +91,8 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(COMPRESSOR_PROCESSING.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("compressor_automation"),
                 new FunctionGameTestInstance(COMPRESSOR_AUTOMATION.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("fluid_cell"),
+                new FunctionGameTestInstance(FLUID_CELL.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
     }
 
     static void infinityCellStorage(GameTestHelper helper) {
@@ -239,6 +247,38 @@ public final class ModGameTests {
         }
         helper.assertValueEqual(be.getInput().getStackInSlot(0).getCount(), 16, "singularities in the input");
         helper.assertTrue(be.getOutput().getStackInSlot(0).isEmpty(), "Output should be empty");
+
+        helper.succeed();
+    }
+
+    static void fluidCell(GameTestHelper helper) {
+        var water = AEFluidKey.of(Fluids.WATER);
+        var lava = AEFluidKey.of(Fluids.LAVA);
+        var source = IActionSource.empty();
+
+        // Storage: unlimited water, voids inserted water, rejects other fluids
+        var inv = StorageCells.getCellInventory(InfinityFluidCellItem.imprinted(water), null);
+        helper.assertTrue(inv != null, "Imprinted fluid cell should have an inventory");
+        helper.assertValueEqual(inv.extract(water, 1_000_000_000L, Actionable.MODULATE, source), 1_000_000_000L, "extracted water");
+        helper.assertValueEqual(inv.insert(water, 1000, Actionable.MODULATE, source), 1000L, "inserted water");
+        helper.assertValueEqual(inv.insert(lava, 1000, Actionable.MODULATE, source), 0L, "inserted lava");
+        helper.assertFalse(StorageCells.isCellHandled(new ItemStack(ModItems.INFINITY_FLUID_CELL.get())), "Fluid cell without imprint should not be handled");
+
+        // Imprinting: the bucket comes back empty
+        var level = helper.getLevel();
+        var recipe = FluidImprintRecipe.INSTANCE;
+        var blank = new ItemStack(ModItems.BLANK_INFINITY_FLUID_CELL.get());
+        var input = grid(blank, ItemStack.EMPTY, new ItemStack(Items.WATER_BUCKET));
+        helper.assertTrue(recipe.matches(input, level), "Blank fluid cell + water bucket should match");
+        helper.assertValueEqual(InfinityFluidCellItem.getImprintedFluid(recipe.assemble(input)), water, "imprinted fluid");
+        var remaining = recipe.getRemainingItems(input);
+        helper.assertTrue(remaining.get(2).is(Items.BUCKET), "The water bucket should come back as an empty bucket");
+        helper.assertTrue(remaining.get(0).isEmpty(), "Nothing should be left in the cell's slot");
+
+        helper.assertFalse(recipe.matches(grid(blank, new ItemStack(Items.BUCKET)), level), "Empty bucket should not match");
+        helper.assertFalse(recipe.matches(grid(blank, new ItemStack(Items.COBBLESTONE)), level), "Non-container should not match");
+        helper.assertFalse(recipe.matches(grid(new ItemStack(ModItems.BLANK_INFINITY_CELL.get()), new ItemStack(Items.WATER_BUCKET)), level),
+                "The item cell is imprinted by the item recipe, not the fluid recipe");
 
         helper.succeed();
     }

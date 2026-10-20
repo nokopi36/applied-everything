@@ -17,4 +17,6 @@ CC BY-NC-SA 3.0:
 Derived textures (changes: recoloured):
   textures/item/blank_infinity_cell.png             - based on AE2's creative_storage_cell.png
   textures/item/infinity_cell.png                   - based on AE2's creative_storage_cell.png
+  textures/item/blank_infinity_fluid_cell.png       - based on AE2's creative_storage_cell.png
+  textures/item/infinity_fluid_cell.png             - based on AE2's creative_storage_cell.png
   textures/gui/singularity_compressor.png           - based on AE2's guis/inscriber.png (press slots removed, centred)

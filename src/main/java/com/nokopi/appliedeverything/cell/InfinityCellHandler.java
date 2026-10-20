@@ -12,16 +12,16 @@ public class InfinityCellHandler implements ICellHandler {
 
     @Override
     public boolean isCell(ItemStack is) {
-        return is.getItem() instanceof InfinityCellItem && InfinityCellItem.getImprintedItem(is) != null;
+        return is.getItem() instanceof ImprintedCell cell && cell.getImprintedKey(is) != null;
     }
 
     @Override
     @Nullable
     public StorageCell getCellInventory(ItemStack is, @Nullable ISaveProvider host) {
-        if (!(is.getItem() instanceof InfinityCellItem)) {
+        if (!(is.getItem() instanceof ImprintedCell cell)) {
             return null;
         }
-        var item = InfinityCellItem.getImprintedItem(is);
-        return item != null ? new InfinityCellInventory(is, item) : null;
+        var key = cell.getImprintedKey(is);
+        return key != null ? new InfinityCellInventory(is, key) : null;
     }
 }

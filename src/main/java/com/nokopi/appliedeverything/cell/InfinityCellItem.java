@@ -8,6 +8,7 @@ import com.nokopi.appliedeverything.ModDataComponents;
 import com.nokopi.appliedeverything.ModItems;
 
 import appeng.api.stacks.AEItemKey;
+import appeng.api.stacks.AEKey;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
@@ -15,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 
-public class InfinityCellItem extends Item {
+public class InfinityCellItem extends Item implements ImprintedCell {
     public static final String IMPRINTED_NAME_KEY = "item.applied_everything.infinity_cell.imprinted";
     public static final String TOOLTIP_SUPPLY_KEY = "tooltip.applied_everything.infinity_cell.supply";
     public static final String TOOLTIP_VOID_KEY = "tooltip.applied_everything.infinity_cell.void";
@@ -28,6 +29,12 @@ public class InfinityCellItem extends Item {
     @Nullable
     public static AEItemKey getImprintedItem(ItemStack stack) {
         return stack.get(ModDataComponents.IMPRINTED_ITEM.get());
+    }
+
+    @Override
+    @Nullable
+    public AEKey getImprintedKey(ItemStack stack) {
+        return getImprintedItem(stack);
     }
 
     public static ItemStack imprinted(AEItemKey key) {

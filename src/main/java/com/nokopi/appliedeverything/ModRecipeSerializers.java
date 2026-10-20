@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.imprint.FluidImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 
 import net.minecraft.core.registries.Registries;
@@ -12,6 +13,8 @@ public final class ModRecipeSerializers {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ImprintRecipe>> IMPRINT = RECIPE_SERIALIZERS.register("imprint",
             () -> ImprintRecipe.SERIALIZER);
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FluidImprintRecipe>> FLUID_IMPRINT = RECIPE_SERIALIZERS.register("fluid_imprint",
+            () -> FluidImprintRecipe.SERIALIZER);
 
     private ModRecipeSerializers() {
     }

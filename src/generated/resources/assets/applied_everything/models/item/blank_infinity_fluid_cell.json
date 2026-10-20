@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "applied_everything:item/blank_infinity_fluid_cell"
+  }
+}

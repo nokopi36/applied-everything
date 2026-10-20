@@ -7,6 +7,8 @@ navigation:
 item_ids:
 - blank_infinity_cell
 - infinity_cell
+- blank_infinity_fluid_cell
+- infinity_fluid_cell
 ---
 
 # Infinity Cell
@@ -43,3 +45,18 @@ These items cannot be imprinted:
 * Inserting the imprinted item voids it, like AE2's creative cell.
 * Other items are not accepted.
 * The cell cannot be placed inside other cells, such as portable cells.
+
+## Infinity Fluid Cell
+
+<Row>
+  <ItemImage id="blank_infinity_fluid_cell" scale="4" />
+  <ItemImage id="infinity_fluid_cell" scale="4" />
+</Row>
+
+The same, for a fluid. The blank cell is made like the blank Infinity Cell, with an
+<ItemLink id="ae2:fluid_cell_housing" /> instead of the item cell housing.
+
+<RecipeFor id="blank_infinity_fluid_cell" />
+
+To imprint it, place it in a crafting grid with **one** filled fluid container, such as a water bucket. The container
+comes back empty. Fluids carrying extra data cannot be imprinted.

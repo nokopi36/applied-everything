@@ -1,10 +1,13 @@
 {
   "block.applied_everything.singularity_compressor": "Singularity Compressor",
   "item.applied_everything.blank_infinity_cell": "Blank Infinity Cell",
+  "item.applied_everything.blank_infinity_fluid_cell": "Blank Infinity Fluid Cell",
   "item.applied_everything.compressed_singularity": "Compressed Singularity",
   "item.applied_everything.infinity_cell": "Infinity Cell",
   "item.applied_everything.infinity_cell.imprinted": "Infinity Cell: %s",
   "item.applied_everything.infinity_core": "Infinity Core",
+  "item.applied_everything.infinity_fluid_cell": "Infinity Fluid Cell",
+  "item.applied_everything.infinity_fluid_cell.imprinted": "Infinity Fluid Cell: %s",
   "itemGroup.applied_everything": "Applied Everything",
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "Not imprinted",
