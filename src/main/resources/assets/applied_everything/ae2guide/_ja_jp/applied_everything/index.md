@@ -22,7 +22,7 @@ ME ストレージセルです。セルを用意できれば、どの MOD のア
    1 回の圧縮に **10,000,000 AE** かかる。
 3. 圧縮特異点 8 個とネザースターで <ItemLink id="infinity_core" /> を作る。
 4. 無限コア、圧縮特異点 3 個、256k ストレージ部品、アイテムセルハウジングで <ItemLink id="blank_infinity_cell" /> を作る。
-5. 空の無限セルにアイテムを刻印して <ItemLink id="infinity_cell" /> にする。
+5. <ItemLink id="imprinter" /> で空の無限セルにアイテムを刻印して <ItemLink id="infinity_cell" /> にする。
 
 無限セル 1 枚に必要なのは圧縮特異点 11 個、つまり特異点 99 個（凝縮したアイテム約 2,500 万個分）と、
 圧縮にかかる 110,000,000 AE です。

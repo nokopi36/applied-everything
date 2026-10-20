@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "axis=z,working=false": { "model": "applied_everything:block/imprinter" },
+    "axis=x,working=false": { "model": "applied_everything:block/imprinter", "y": 90 },
+    "axis=z,working=true": { "model": "applied_everything:block/imprinter_working" },
+    "axis=x,working=true": { "model": "applied_everything:block/imprinter_working", "y": 90 }
+  }
+}

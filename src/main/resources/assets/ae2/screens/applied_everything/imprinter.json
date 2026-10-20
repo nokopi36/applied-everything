@@ -1,0 +1,56 @@
+{
+  "includes": [
+    "../common/common.json",
+    "../common/player_inventory.json",
+    "../common/toolbox.json"
+  ],
+  "background": {
+    "texture": "applied_everything:textures/gui/imprinter.png",
+    "srcRect": [0, 0, 176, 178]
+  },
+  "slots": {
+    "APPLIED_EVERYTHING_IMPRINT_ITEM": {
+      "left": 39,
+      "top": 23
+    },
+    "APPLIED_EVERYTHING_IMPRINT_CELL": {
+      "left": 63,
+      "top": 39
+    },
+    "APPLIED_EVERYTHING_IMPRINT_TANK": {
+      "left": 39,
+      "top": 55
+    },
+    "APPLIED_EVERYTHING_IMPRINT_CONTAINER": {
+      "left": 15,
+      "top": 55
+    },
+    "MACHINE_OUTPUT": {
+      "left": 113,
+      "top": 40
+    }
+  },
+  "text": {
+    "dialog_title": {
+      "text": {
+        "translate": "block.applied_everything.imprinter"
+      },
+      "position": {
+        "left": 8,
+        "top": 6
+      }
+    }
+  },
+  "images": {
+    "progressBar": {
+      "texture": "applied_everything:textures/gui/imprinter.png",
+      "srcRect": [176, 0, 6, 18]
+    }
+  },
+  "widgets": {
+    "progressBar": {
+      "left": 135,
+      "top": 39
+    }
+  }
+}

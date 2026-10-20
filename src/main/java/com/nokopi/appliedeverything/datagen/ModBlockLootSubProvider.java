@@ -22,5 +22,6 @@ public class ModBlockLootSubProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         dropSelf(ModBlocks.SINGULARITY_COMPRESSOR.get());
+        dropSelf(ModBlocks.IMPRINTER.get());
     }
 }

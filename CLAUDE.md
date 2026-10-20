@@ -37,6 +37,6 @@
 ## 利用範囲とライセンス
 - 公開予定（Modrinth / CurseForge）。コードは MIT（`LICENSE`）、`assets/applied_everything/` 以下は CC BY-NC-SA 3.0（`LICENSE-ASSETS`）。
 - AE2 のテクスチャを元にしてよい（AE2 のアセットも CC BY-NC-SA 3.0）。元にしたファイルは `LICENSE-ASSETS` の一覧に追記する。AE2 の**コード**はコピーしない。
-- AE2 由来のテクスチャ（セル、圧縮機の GUI）は `tools/derive_ae2_textures.py`（Pillow 必須、AE2 の画像を塗り替え）、特異点・無限コア・圧縮機のブロックのテクスチャは `tools/generate_placeholder_textures.py` で生成。
-- 特異点圧縮機のブロックモデル（`models/block/singularity_compressor*.json`）は `tools/generate_compressor_model.py` で生成する。blockstate とアイテム定義は `src/main/resources` に手書き（データ生成の対象外）。
+- AE2 由来のテクスチャ（セル、圧縮機と刻印機の GUI）は `tools/derive_ae2_textures.py`（Pillow 必須、AE2 の画像を塗り替え）、特異点・無限コア・圧縮機のブロックのテクスチャは `tools/generate_placeholder_textures.py` で生成。
+- 特異点圧縮機と刻印機のブロックモデル（`models/block/singularity_compressor*.json`、`imprinter*.json`）は `tools/generate_compressor_model.py` で生成する。blockstate とアイテム定義は `src/main/resources` に手書き（データ生成の対象外）。
 - Modrinth は AI 生成コードがかなりの部分を占める場合に申告が必要（2026-08〜）。公開前に最新ルールを確認する。

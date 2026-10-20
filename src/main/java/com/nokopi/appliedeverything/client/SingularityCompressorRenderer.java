@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
+import com.nokopi.appliedeverything.machine.FrameMachineBlock;
 import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.core.definitions.AEItems;
@@ -42,7 +42,7 @@ public class SingularityCompressorRenderer
             float partialTick, Vec3 cameraPos, @Nullable ModelFeatureRenderer.CrumblingOverlay crumblingOverlay) {
         BlockEntityRenderer.super.extractRenderState(be, state, partialTick, cameraPos, crumblingOverlay);
         state.item.clear();
-        if (!be.getBlockState().getValue(SingularityCompressorBlock.WORKING)) {
+        if (!be.getBlockState().getValue(FrameMachineBlock.WORKING)) {
             return;
         }
         state.spinDegrees = (System.currentTimeMillis() % 360_000L) / 1000f * DEGREES_PER_SECOND % 360f;

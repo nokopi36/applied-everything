@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": "ae2:engineering_processor",
+    "L": "ae2:logic_processor",
+    "S": "ae2:singularity",
+    "W": "ae2:cell_workbench"
+  },
+  "pattern": [
+    "SLS",
+    "EWE",
+    "SLS"
+  ],
+  "result": {
+    "id": "applied_everything:imprinter"
+  }
+}

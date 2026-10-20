@@ -1,5 +1,6 @@
 {
   "values": [
-    "applied_everything:singularity_compressor"
+    "applied_everything:singularity_compressor",
+    "applied_everything:imprinter"
   ]
 }

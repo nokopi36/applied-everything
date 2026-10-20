@@ -27,7 +27,7 @@ An Infinity Cell supplies one item without limit. Put it in an <ItemLink id="ae2
 
 ## Imprinting
 
-Place a blank Infinity Cell and **one** other item anywhere in a crafting grid. The result is an Infinity Cell for that
+Put a blank Infinity Cell and the item into the [Imprinter](imprinter.md). The result is an Infinity Cell for that
 item.
 
 An imprint cannot be changed. The cell does not work in a <ItemLink id="ae2:cell_workbench" /> either.
@@ -58,5 +58,5 @@ The same, for a fluid. The blank cell is made like the blank Infinity Cell, with
 
 <RecipeFor id="blank_infinity_fluid_cell" />
 
-To imprint it, place it in a crafting grid with **one** filled fluid container, such as a water bucket. The container
-comes back empty. Fluids carrying extra data cannot be imprinted.
+To imprint it, put it into the [Imprinter](imprinter.md) with 1,000 mB of the fluid in the tank. Fluids carrying
+extra data cannot be imprinted.

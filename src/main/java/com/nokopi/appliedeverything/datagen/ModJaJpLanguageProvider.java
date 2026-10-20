@@ -24,6 +24,7 @@ public class ModJaJpLanguageProvider extends LanguageProvider {
         addItem(ModItems.BLANK_INFINITY_CELL, "空の無限セル");
         addItem(ModItems.INFINITY_CELL, "無限セル");
         addBlock(ModBlocks.SINGULARITY_COMPRESSOR, "特異点圧縮機");
+        addBlock(ModBlocks.IMPRINTER, "刻印機");
         add(CompressionCategory.ENERGY_KEY, "%s AE");
         addItem(ModItems.BLANK_INFINITY_FLUID_CELL, "空の無限流体セル");
         addItem(ModItems.INFINITY_FLUID_CELL, "無限流体セル");

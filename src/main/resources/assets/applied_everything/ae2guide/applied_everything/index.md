@@ -24,7 +24,7 @@ to imprint first is part of the game.
 3. Craft an <ItemLink id="infinity_core" /> from 8 compressed singularities and a nether star.
 4. Craft a <ItemLink id="blank_infinity_cell" /> from the core, 3 more compressed singularities, 256k storage components
    and an item cell housing.
-5. Imprint the blank cell with any item to get an <ItemLink id="infinity_cell" />.
+5. Imprint the blank cell with any item in the <ItemLink id="imprinter" /> to get an <ItemLink id="infinity_cell" />.
 
 One Infinity Cell takes 11 compressed singularities: 99 singularities, or about 25 million condensed items, and
 110,000,000 AE of compression.

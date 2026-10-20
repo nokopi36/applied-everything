@@ -17,6 +17,6 @@ public class ModBlockTagsProvider extends BlockTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider lookupProvider) {
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.SINGULARITY_COMPRESSOR.get());
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.SINGULARITY_COMPRESSOR.get(), ModBlocks.IMPRINTER.get());
     }
 }

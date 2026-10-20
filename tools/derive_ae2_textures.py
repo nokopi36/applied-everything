@@ -3,6 +3,7 @@
 - Infinity Cells and Infinity Fluid Cells: AE2's creative storage cell with the band recoloured
 - Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
   and the rest moved to the centre
+- Imprinter GUI: AE2's inscriber GUI with one more slot (the fluid container) copied to the left of the bottom slot
 
 The results are derivative works of AE2's assets and are licensed under CC BY-NC-SA 3.0
 (see LICENSE-ASSETS). Requires Pillow.
@@ -64,6 +65,19 @@ def compressor_gui(src):
     return im
 
 
+# The inscriber's bottom press slot frame (x0, y0, x1, y1), copied this far left for the container slot
+INSCRIBER_BOTTOM_SLOT = (36, 52, 57, 73)
+CONTAINER_SLOT_SHIFT = -24
+
+
+def imprinter_gui(src):
+    im = Image.open(src).convert('RGBA')
+    x0, y0, x1, y1 = INSCRIBER_BOTTOM_SLOT
+    frame = im.crop((x0, y0, x1 + 1, y1 + 1))
+    im.paste(frame, (x0 + CONTAINER_SLOT_SHIFT, y0))
+    return im
+
+
 def main():
     ae2_dir, out_dir = sys.argv[1], sys.argv[2]
     cell = f'{ae2_dir}/{CELL_SOURCE}'
@@ -73,6 +87,7 @@ def main():
     recolour(cell, dict(zip(AE2_BAND, BLANK_FLUID_BAND))).save(f'{out_dir}/item/blank_infinity_fluid_cell.png')
 
     compressor_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/singularity_compressor.png')
+    imprinter_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/imprinter.png')
 
 
 if __name__ == '__main__':

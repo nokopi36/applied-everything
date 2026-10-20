@@ -1,6 +1,5 @@
 package com.nokopi.appliedeverything.gametest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -10,10 +9,10 @@ import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellInventory;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
-import com.nokopi.appliedeverything.imprint.FluidImprintRecipe;
-import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
-import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
+import com.nokopi.appliedeverything.machine.FrameMachineBlock;
+import com.nokopi.appliedeverything.machine.ImprinterBlockEntity;
+import com.nokopi.appliedeverything.machine.ImprintTank;
 import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.api.config.Actionable;
@@ -21,6 +20,7 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.stacks.AEFluidKey;
 import appeng.api.stacks.AEItemKey;
 import appeng.api.storage.StorageCells;
+import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,7 +36,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemContainerContents;
-import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -56,8 +55,10 @@ public final class ModGameTests {
             () -> ModGameTests::infinityCellStorage);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINT_RULES = TEST_FUNCTIONS.register("imprint_rules",
             () -> ModGameTests::imprintRules);
-    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINT_RECIPE = TEST_FUNCTIONS.register("imprint_recipe",
-            () -> ModGameTests::imprintRecipe);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINTER = TEST_FUNCTIONS.register("imprinter",
+            () -> ModGameTests::imprinter);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> IMPRINTER_TICKING = TEST_FUNCTIONS.register("imprinter_ticking",
+            () -> ModGameTests::imprinterTicking);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_POWER = TEST_FUNCTIONS.register("compressor_power",
             () -> ModGameTests::compressorPower);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> COMPRESSOR_PROCESSING = TEST_FUNCTIONS.register("compressor_processing",
@@ -83,8 +84,10 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(INFINITY_CELL_STORAGE.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("imprint_rules"),
                 new FunctionGameTestInstance(IMPRINT_RULES.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
-        event.registerTest(id("imprint_recipe"),
-                new FunctionGameTestInstance(IMPRINT_RECIPE.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("imprinter"),
+                new FunctionGameTestInstance(IMPRINTER.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("imprinter_ticking"),
+                new FunctionGameTestInstance(IMPRINTER_TICKING.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 300, 0, true)));
         event.registerTest(id("compressor_power"),
                 new FunctionGameTestInstance(COMPRESSOR_POWER.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("compressor_processing"),
@@ -149,25 +152,79 @@ public final class ModGameTests {
         helper.succeed();
     }
 
-    static void imprintRecipe(GameTestHelper helper) {
-        var level = helper.getLevel();
-        var recipe = ImprintRecipe.INSTANCE;
-        var blank = new ItemStack(ModItems.BLANK_INFINITY_CELL.get());
-        var diamond = new ItemStack(Items.DIAMOND);
+    static void imprinter(GameTestHelper helper) {
+        // Items: a blank cell and cobblestone go in through the automation side, each into its own slot
+        var itemPos = new BlockPos(0, 1, 0);
+        helper.setBlock(itemPos, ModBlocks.IMPRINTER.get());
+        var be = helper.getBlockEntity(itemPos, ImprinterBlockEntity.class);
+        var items = helper.getLevel().getCapability(Capabilities.Item.BLOCK, helper.absolutePos(itemPos), Direction.UP);
+        try (var tx = Transaction.openRoot()) {
+            helper.assertValueEqual(items.insert(ItemResource.of(ModItems.BLANK_INFINITY_CELL.get()), 1, tx), 1, "blank cells inserted");
+            helper.assertValueEqual(items.insert(ItemResource.of(Items.COBBLESTONE), 3, tx), 3, "cobblestone inserted");
+            helper.assertValueEqual(items.insert(ItemResource.of(ModItems.INFINITY_CORE.get()), 1, tx), 0, "infinity cores inserted");
+            tx.commit();
+        }
+        helper.assertTrue(be.getCellSlot().getStackInSlot(0).is(ModItems.BLANK_INFINITY_CELL.get()), "Blank cell should be in the cell slot");
+        helper.assertValueEqual(be.getItemSlot().getStackInSlot(0).getCount(), 3, "cobblestone in the item slot");
 
-        // Shapeless: any positions in the grid
-        var input = grid(ItemStack.EMPTY, diamond, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, blank, ItemStack.EMPTY, ItemStack.EMPTY);
-        helper.assertTrue(recipe.matches(input, level), "Blank cell + diamond should match");
-        var result = recipe.assemble(input);
-        helper.assertTrue(result.is(ModItems.INFINITY_CELL.get()), "Result should be an Infinity Cell");
-        helper.assertValueEqual(InfinityCellItem.getImprintedItem(result), AEItemKey.of(Items.DIAMOND), "imprinted item");
+        helper.assertValueEqual(ticksToImprint(be), ImprinterBlockEntity.TICKS_PER_IMPRINT, "ticks to imprint an item");
+        var cell = be.getOutputSlot().getStackInSlot(0);
+        helper.assertValueEqual(InfinityCellItem.getImprintedItem(cell), AEItemKey.of(Items.COBBLESTONE), "imprinted item");
+        helper.assertValueEqual(be.getItemSlot().getStackInSlot(0).getCount(), 2, "cobblestone left");
+        helper.assertTrue(be.getCellSlot().getStackInSlot(0).isEmpty(), "The blank cell should be used up");
 
-        helper.assertFalse(recipe.matches(grid(blank, diamond, new ItemStack(Items.COBBLESTONE)), level), "Three items should not match");
-        helper.assertFalse(recipe.matches(grid(blank, blank.copy()), level), "Two blank cells should not match");
-        helper.assertFalse(recipe.matches(grid(diamond), level), "Diamond alone should not match");
-        helper.assertFalse(recipe.matches(grid(blank, new ItemStack(ModItems.INFINITY_CORE.get())), level), "Own items should not match");
+        // Fluids: a water bucket is poured into the tank and stays behind empty
+        var fluidPos = new BlockPos(2, 1, 0);
+        helper.setBlock(fluidPos, ModBlocks.IMPRINTER.get());
+        var fluidBe = helper.getBlockEntity(fluidPos, ImprinterBlockEntity.class);
+        fluidBe.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_FLUID_CELL.get()));
+        fluidBe.getContainerSlot().setItemDirect(0, new ItemStack(Items.WATER_BUCKET));
+        fluidBe.serverTick();
+        helper.assertValueEqual(fluidBe.getTank().getAmount(0), (long) ImprintTank.CAPACITY, "water in the tank");
+        helper.assertTrue(fluidBe.getContainerSlot().getStackInSlot(0).is(Items.BUCKET), "The bucket should be left empty");
+
+        helper.assertTrue(ticksToImprint(fluidBe) > 0, "Fluid cell should be imprinted");
+        helper.assertValueEqual(InfinityFluidCellItem.getImprintedFluid(fluidBe.getOutputSlot().getStackInSlot(0)),
+                AEFluidKey.of(Fluids.WATER), "imprinted fluid");
+        helper.assertTrue(fluidBe.getTank().isEmpty(), "The tank should be used up");
 
         helper.succeed();
+    }
+
+    /** The imprinter works on its own as the world ticks: only power is supplied by the test. */
+    static void imprinterTicking(GameTestHelper helper) {
+        var pos = new BlockPos(0, 1, 0);
+        helper.setBlock(pos, ModBlocks.IMPRINTER.get());
+        var be = helper.getBlockEntity(pos, ImprinterBlockEntity.class);
+        be.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_CELL.get()));
+        be.getItemSlot().setItemDirect(0, new ItemStack(Items.COBBLESTONE));
+        helper.onEachTick(() -> be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE));
+
+        // A second imprinter powered by an AE2 network: a creative energy cell right next to it
+        var netPos = new BlockPos(3, 1, 0);
+        helper.setBlock(netPos, ModBlocks.IMPRINTER.get());
+        helper.setBlock(new BlockPos(4, 1, 0), AEBlocks.CREATIVE_ENERGY_CELL.block());
+        var netBe = helper.getBlockEntity(netPos, ImprinterBlockEntity.class);
+        netBe.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_CELL.get()));
+        netBe.getItemSlot().setItemDirect(0, new ItemStack(Items.COBBLESTONE));
+
+        helper.succeedWhen(() -> {
+            helper.assertFalse(be.getOutputSlot().getStackInSlot(0).isEmpty(), "No imprinted cell yet (buffer power)");
+            helper.assertFalse(netBe.getOutputSlot().getStackInSlot(0).isEmpty(),
+                    "No imprinted cell yet (network power), grid=" + netBe.getMainNode().getGrid() + " consumed=" + netBe.getConsumedEnergy());
+        });
+    }
+
+    /** Ticks an imprinter with unlimited buffered power until it produces a cell; returns the ticks taken. */
+    private static int ticksToImprint(ImprinterBlockEntity be) {
+        for (int tick = 1; tick <= 1_000; tick++) {
+            be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
+            be.serverTick();
+            if (!be.getOutputSlot().getStackInSlot(0).isEmpty()) {
+                return tick;
+            }
+        }
+        return -1;
     }
 
     static void compressorPower(GameTestHelper helper) {
@@ -264,22 +321,6 @@ public final class ModGameTests {
         helper.assertValueEqual(inv.insert(lava, 1000, Actionable.MODULATE, source), 0L, "inserted lava");
         helper.assertFalse(StorageCells.isCellHandled(new ItemStack(ModItems.INFINITY_FLUID_CELL.get())), "Fluid cell without imprint should not be handled");
 
-        // Imprinting: the bucket comes back empty
-        var level = helper.getLevel();
-        var recipe = FluidImprintRecipe.INSTANCE;
-        var blank = new ItemStack(ModItems.BLANK_INFINITY_FLUID_CELL.get());
-        var input = grid(blank, ItemStack.EMPTY, new ItemStack(Items.WATER_BUCKET));
-        helper.assertTrue(recipe.matches(input, level), "Blank fluid cell + water bucket should match");
-        helper.assertValueEqual(InfinityFluidCellItem.getImprintedFluid(recipe.assemble(input)), water, "imprinted fluid");
-        var remaining = recipe.getRemainingItems(input);
-        helper.assertTrue(remaining.get(2).is(Items.BUCKET), "The water bucket should come back as an empty bucket");
-        helper.assertTrue(remaining.get(0).isEmpty(), "Nothing should be left in the cell's slot");
-
-        helper.assertFalse(recipe.matches(grid(blank, new ItemStack(Items.BUCKET)), level), "Empty bucket should not match");
-        helper.assertFalse(recipe.matches(grid(blank, new ItemStack(Items.COBBLESTONE)), level), "Non-container should not match");
-        helper.assertFalse(recipe.matches(grid(new ItemStack(ModItems.BLANK_INFINITY_CELL.get()), new ItemStack(Items.WATER_BUCKET)), level),
-                "The item cell is imprinted by the item recipe, not the fluid recipe");
-
         helper.succeed();
     }
 
@@ -295,24 +336,16 @@ public final class ModGameTests {
             be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
             be.serverTick();
             if (tick == 1) {
-                helper.assertTrue(be.getBlockState().getValue(SingularityCompressorBlock.WORKING), "Should show as working");
+                helper.assertTrue(be.getBlockState().getValue(FrameMachineBlock.WORKING), "Should show as working");
             }
             if (!be.getOutput().getStackInSlot(0).isEmpty()) {
                 helper.assertValueEqual(be.getOutput().getStackInSlot(0).getCount(), 1, "compressed singularities");
                 helper.assertTrue(be.getInput().getStackInSlot(0).isEmpty(), "All 9 singularities should be used");
                 be.serverTick();
-                helper.assertFalse(be.getBlockState().getValue(SingularityCompressorBlock.WORKING), "Should stop working without input");
+                helper.assertFalse(be.getBlockState().getValue(FrameMachineBlock.WORKING), "Should stop working without input");
                 return tick;
             }
         }
         throw helper.assertionException("Compressor never produced output");
-    }
-
-    private static CraftingInput grid(ItemStack... stacks) {
-        var items = new ArrayList<>(List.of(stacks));
-        while (items.size() < 9) {
-            items.add(ItemStack.EMPTY);
-        }
-        return CraftingInput.of(3, 3, items);
     }
 }

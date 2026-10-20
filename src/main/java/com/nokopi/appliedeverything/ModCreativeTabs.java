@@ -20,6 +20,7 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.BLANK_INFINITY_CELL.get());
                 output.accept(ModItems.BLANK_INFINITY_FLUID_CELL.get());
                 output.accept(ModItems.SINGULARITY_COMPRESSOR.get());
+                output.accept(ModItems.IMPRINTER.get());
             })
             .build());
 

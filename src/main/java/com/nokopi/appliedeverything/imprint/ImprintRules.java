@@ -2,6 +2,8 @@ package com.nokopi.appliedeverything.imprint;
 
 import com.nokopi.appliedeverything.ModTags;
 
+import appeng.api.stacks.AEFluidKey;
+
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.transfer.fluid.FluidResource;
 
@@ -23,6 +25,10 @@ public final class ImprintRules {
         // Only items in their default state: blocks duplicating contents (shulker boxes, cells),
         // enchantments, custom names, damage and the like. Not configurable, since it is about state, not item type.
         return stack.isComponentsPatchEmpty();
+    }
+
+    public static boolean canImprint(AEFluidKey fluid) {
+        return !fluid.getFluid().builtInRegistryHolder().is(ModTags.FLUID_IMPRINT_BLACKLIST) && !fluid.hasComponents();
     }
 
     public static boolean canImprint(FluidResource fluid) {

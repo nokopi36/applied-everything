@@ -168,6 +168,14 @@ def compressor_pyramid():
     return _pyramid(hexc('#5f228c'), hexc('#7a32b0'), hexc('#9a4fd0'))
 
 
+def imprinter_pyramid():
+    return _pyramid(hexc('#8a5a12'), hexc('#b8801e'), hexc('#e0aa3a'))
+
+
+def imprinter_pyramid_lit():
+    return _pyramid(hexc('#e0a830'), hexc('#ffcc4d'), hexc('#fff0b0'))
+
+
 def compressor_pyramid_lit():
     return _pyramid(hexc('#a050e0'), hexc('#c47cf2'), hexc('#f0c8ff'))
 
@@ -180,6 +188,8 @@ def main():
         'block/singularity_compressor_frame': compressor_frame(),
         'block/singularity_compressor_pyramid': compressor_pyramid(),
         'block/singularity_compressor_pyramid_lit': compressor_pyramid_lit(),
+        'block/imprinter_pyramid': imprinter_pyramid(),
+        'block/imprinter_pyramid_lit': imprinter_pyramid_lit(),
     }
     for name, px in textures.items():
         write_png(f'{out_dir}/{name}.png', px)

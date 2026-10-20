@@ -1,7 +1,9 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.client.ImprinterScreen;
 import com.nokopi.appliedeverything.client.SingularityCompressorRenderer;
 import com.nokopi.appliedeverything.client.SingularityCompressorScreen;
+import com.nokopi.appliedeverything.machine.ImprinterMenu;
 import com.nokopi.appliedeverything.machine.SingularityCompressorMenu;
 
 import appeng.api.client.StorageCellModels;
@@ -38,5 +40,6 @@ public class AppliedEverythingClient {
         // AE2 loads screen styles from its own namespace: assets/ae2/screens/...
         InitScreens.register(event, SingularityCompressorMenu.TYPE, SingularityCompressorScreen::new,
                 "/screens/applied_everything/singularity_compressor.json");
+        InitScreens.register(event, ImprinterMenu.TYPE, ImprinterScreen::new, "/screens/applied_everything/imprinter.json");
     }
 }

@@ -4,8 +4,6 @@ import java.util.concurrent.CompletableFuture;
 
 import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModItems;
-import com.nokopi.appliedeverything.imprint.FluidImprintRecipe;
-import com.nokopi.appliedeverything.imprint.ImprintRecipe;
 
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
@@ -16,7 +14,6 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.world.item.Items;
 
 public class ModRecipeProvider extends RecipeProvider {
@@ -73,10 +70,17 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_infinity_core", this.has(ModItems.INFINITY_CORE.get()))
                 .save(this.output);
 
-        SpecialRecipeBuilder.special(() -> ImprintRecipe.INSTANCE)
-                .save(this.output, AppliedEverything.MODID + ":imprint");
-        SpecialRecipeBuilder.special(() -> FluidImprintRecipe.INSTANCE)
-                .save(this.output, AppliedEverything.MODID + ":fluid_imprint");
+        // Imprinting happens in the Imprinter, not in a crafting grid
+        ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.IMPRINTER.get())
+                .pattern("SLS")
+                .pattern("EWE")
+                .pattern("SLS")
+                .define('W', AEBlocks.CELL_WORKBENCH)
+                .define('L', AEItems.LOGIC_PROCESSOR)
+                .define('E', AEItems.ENGINEERING_PROCESSOR)
+                .define('S', AEItems.SINGULARITY)
+                .unlockedBy("has_singularity", this.has(AEItems.SINGULARITY))
+                .save(this.output);
     }
 
     public static class Runner extends RecipeProvider.Runner {

@@ -27,6 +27,7 @@ public final class ModItems {
     public static final DeferredItem<InfinityFluidCellItem> INFINITY_FLUID_CELL = ITEMS.registerItem("infinity_fluid_cell",
             InfinityFluidCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final DeferredItem<BlockItem> SINGULARITY_COMPRESSOR = ITEMS.registerSimpleBlockItem("singularity_compressor", ModBlocks.SINGULARITY_COMPRESSOR);
+    public static final DeferredItem<BlockItem> IMPRINTER = ITEMS.registerSimpleBlockItem("imprinter", ModBlocks.IMPRINTER);
 
     private ModItems() {
     }

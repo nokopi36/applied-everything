@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.machine.ImprinterMenu;
 import com.nokopi.appliedeverything.machine.SingularityCompressorMenu;
 
 import net.minecraft.core.registries.Registries;
@@ -11,6 +12,7 @@ public final class ModMenus {
 
     static {
         MENU_TYPES.register("singularity_compressor", () -> SingularityCompressorMenu.TYPE);
+        MENU_TYPES.register("imprinter", () -> ImprinterMenu.TYPE);
     }
 
     private ModMenus() {

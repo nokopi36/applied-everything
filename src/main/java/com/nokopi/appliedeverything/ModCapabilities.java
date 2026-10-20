@@ -21,5 +21,12 @@ public final class ModCapabilities {
         event.registerBlockEntity(Capabilities.Energy.BLOCK, compressor, (be, side) -> be.getEnergyStorage(side));
         // Hoppers, pipes and AE2 buses: insert singularities, extract compressed singularities
         event.registerBlockEntity(Capabilities.Item.BLOCK, compressor, (be, side) -> be.getExposedItemHandler(side));
+
+        var imprinter = ModBlockEntities.IMPRINTER.get();
+        event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, imprinter, (be, context) -> (IInWorldGridNodeHost) be);
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, imprinter, (be, side) -> be.getEnergyStorage(side));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, imprinter, (be, side) -> be.getExposedItemHandler(side));
+        // AE2 turns this into a fluid handler, so pipes can fill the tank
+        event.registerBlockEntity(AECapabilities.GENERIC_INTERNAL_INV, imprinter, (be, side) -> be.getTank());
     }
 }

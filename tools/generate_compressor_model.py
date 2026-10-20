@@ -1,6 +1,6 @@
-"""Generates the Singularity Compressor block models (idle and working).
+"""Generates the block models (idle and working) of the frame machines: the Singularity Compressor and the Imprinter.
 
-The block is a frame open at the front and back. On the inside of each of the four walls sits a stepped
+Each is a frame open at the front and back. On the inside of each of the four walls sits a stepped
 square pyramid whose tip points at the centre of the block.
 
 Usage: python tools/generate_compressor_model.py src/main/resources/assets/applied_everything/models/block
@@ -59,15 +59,22 @@ def pyramid_elements(axis, face, direction, texture, glowing):
     return elements
 
 
-def model(working):
+# Machine: textures of its pyramids (the frame is shared)
+MACHINES = {
+    'singularity_compressor': 'singularity_compressor_pyramid',
+    'imprinter': 'imprinter_pyramid',
+}
+
+
+def model(pyramid, working):
     pyramid_texture = '#pyramid_lit' if working else '#pyramid'
     return {
         'parent': 'minecraft:block/block',
         'textures': {
             'particle': f'{NS}:block/singularity_compressor_frame',
             'frame': f'{NS}:block/singularity_compressor_frame',
-            'pyramid': f'{NS}:block/singularity_compressor_pyramid',
-            'pyramid_lit': f'{NS}:block/singularity_compressor_pyramid_lit',
+            'pyramid': f'{NS}:block/{pyramid}',
+            'pyramid_lit': f'{NS}:block/{pyramid}_lit',
         },
         'elements': [frame_element(a, b) for a, b in FRAME]
                     + [e for wall in WALLS for e in pyramid_elements(*wall, pyramid_texture, working)],
@@ -76,10 +83,11 @@ def model(working):
 
 def main():
     out = sys.argv[1]
-    for name, working in (('singularity_compressor', False), ('singularity_compressor_working', True)):
-        with open(f'{out}/{name}.json', 'w', encoding='utf-8') as f:
-            json.dump(model(working), f, indent=2)
-            f.write('\n')
+    for machine, pyramid in MACHINES.items():
+        for name, working in ((machine, False), (f'{machine}_working', True)):
+            with open(f'{out}/{name}.json', 'w', encoding='utf-8') as f:
+                json.dump(model(pyramid, working), f, indent=2)
+                f.write('\n')
 
 
 if __name__ == '__main__':

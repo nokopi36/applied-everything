@@ -28,7 +28,6 @@ public class AppliedEverything {
         ModBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         ModMenus.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
-        ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
         ModGameTests.TEST_FUNCTIONS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);

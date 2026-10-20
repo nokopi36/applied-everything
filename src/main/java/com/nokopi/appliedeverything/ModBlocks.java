@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.machine.ImprinterBlock;
 import com.nokopi.appliedeverything.machine.SingularityCompressorBlock;
 
 import net.minecraft.world.level.block.SoundType;
@@ -13,6 +14,9 @@ public final class ModBlocks {
     public static final DeferredBlock<SingularityCompressorBlock> SINGULARITY_COMPRESSOR = BLOCKS.registerBlock("singularity_compressor",
             SingularityCompressorBlock::new,
             // Open frame: neighbouring faces must still be drawn
+            p -> p.mapColor(MapColor.METAL).strength(2.2f, 11f).requiresCorrectToolForDrops().sound(SoundType.METAL).noOcclusion());
+    public static final DeferredBlock<ImprinterBlock> IMPRINTER = BLOCKS.registerBlock("imprinter",
+            ImprinterBlock::new,
             p -> p.mapColor(MapColor.METAL).strength(2.2f, 11f).requiresCorrectToolForDrops().sound(SoundType.METAL).noOcclusion());
 
     private ModBlocks() {
