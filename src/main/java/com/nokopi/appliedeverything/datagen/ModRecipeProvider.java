@@ -58,7 +58,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .pattern("SPS")
                 .pattern("DID")
                 .pattern("SPS")
-                .define('I', AEBlocks.INSCRIBER)
+                .define('I', AEBlocks.NOT_SO_MYSTERIOUS_CUBE)
                 .define('D', AEBlocks.DENSE_ENERGY_CELL)
                 .define('P', AEItems.ENGINEERING_PROCESSOR)
                 .define('S', AEItems.SINGULARITY)
@@ -96,14 +96,14 @@ public class ModRecipeProvider extends RecipeProvider {
 
         // Imprinting happens in the Imprinter, not in a crafting grid
         ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.IMPRINTER.get())
-                .pattern("SLS")
+                .pattern("CLC")
                 .pattern("EWE")
-                .pattern("SLS")
-                .define('W', AEBlocks.CELL_WORKBENCH)
+                .pattern("CLC")
+                .define('W', AEBlocks.NOT_SO_MYSTERIOUS_CUBE)
                 .define('L', AEItems.LOGIC_PROCESSOR)
                 .define('E', AEItems.ENGINEERING_PROCESSOR)
-                .define('S', AEItems.SINGULARITY)
-                .unlockedBy("has_singularity", this.has(AEItems.SINGULARITY))
+                .define('C', ModItems.COMPRESSED_SINGULARITY.get())
+                .unlockedBy("has_compressed_singularity", this.has(ModItems.COMPRESSED_SINGULARITY.get()))
                 .save(this.output);
     }
 

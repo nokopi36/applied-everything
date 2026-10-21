@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_singularity": {
+    "has_compressed_singularity": {
       "conditions": {
         "items": [
           {
-            "items": "ae2:singularity"
+            "items": "applied_everything:compressed_singularity"
           }
         ]
       },
@@ -21,7 +21,7 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_singularity"
+      "has_compressed_singularity"
     ]
   ],
   "rewards": {
