@@ -33,8 +33,7 @@ item_ids:
 
 次のアイテムは刻印できません。
 
-* Applied Everything 自身のアイテムと、AE2 の <ItemLink id="ae2:singularity" />（特異点が無限に手に入ると、
-  2 枚目以降のセルが電力だけで作れてしまうため）。
+* Applied Everything 自身のアイテムと、AE2 の <ItemLink id="ae2:singularity" />。
 * 通常の状態から変わっているアイテム: エンチャントされたアイテムや本、名前を付けたアイテム、耐久が減った道具、
   中身入りのシュルカーボックス・バンドル・ストレージセル、染めた防具など。
 
@@ -51,8 +50,7 @@ item_ids:
   <ItemImage id="infinity_fluid_cell" scale="4" />
 </Row>
 
-液体版の無限セルです。空の無限流体セルは、空の無限セルのアイテムセルハウジングを
-<ItemLink id="ae2:fluid_cell_housing" /> に替えて作ります。
+液体版の無限セルです。1 種類の液体をいくらでも取り出せるセルです。
 
 <RecipeFor id="blank_infinity_fluid_cell" />
 
