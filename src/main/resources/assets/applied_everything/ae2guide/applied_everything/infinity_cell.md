@@ -34,8 +34,7 @@ An imprint cannot be changed. The cell does not work in a <ItemLink id="ae2:cell
 
 These items cannot be imprinted:
 
-* Items from Applied Everything itself, and AE2's <ItemLink id="ae2:singularity" /> (an endless supply of singularities
-  would make every further cell cost nothing but power).
+* Items from Applied Everything itself, and AE2's <ItemLink id="ae2:singularity" />.
 * Items that differ from their default state: enchanted items and books, renamed items, damaged tools, filled shulker
   boxes, bundles or storage cells, dyed armor, and so on.
 
@@ -52,8 +51,7 @@ These items cannot be imprinted:
   <ItemImage id="infinity_fluid_cell" scale="4" />
 </Row>
 
-The same, for a fluid. The blank cell is made like the blank Infinity Cell, with an
-<ItemLink id="ae2:fluid_cell_housing" /> instead of the item cell housing.
+An Infinity Cell for fluids. It supplies one fluid without limit.
 
 <RecipeFor id="blank_infinity_fluid_cell" />
 
