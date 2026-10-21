@@ -1,5 +1,7 @@
 # Changelog
 
+[日本語](CHANGELOG.ja.md)
+
 ## 1.0.0 - Minecraft 26.1.2
 
 First release.

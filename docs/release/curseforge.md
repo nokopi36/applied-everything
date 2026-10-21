@@ -87,14 +87,14 @@ See the [README](https://github.com/nokopi36/applied-everything#for-modpack-make
 | Display name | `Applied Everything <version> (26.1.2)` |
 | Release type | Beta（AE2 がベータの間） |
 | Game versions | 26.1.2、NeoForge、Client、Server、Java 25 |
-| Changelog | `CHANGELOG.md` の該当バージョンの節 |
+| Changelog | `CHANGELOG.md` と `CHANGELOG.ja.md` の該当バージョンの節（英語、日本語の順に並べる） |
 | Related projects | Applied Energistics 2: Required Dependency / GuideME: Required Dependency / Applied Flux: Optional Dependency / JEI: Optional Dependency / Jade: Optional Dependency |
 
 3. 初回はモデレーションの審査がある（数日かかることがある）。審査が通ったら README にプロジェクトの URL を追記する
 
 ## 公開前の確認
 
-- [ ] `gradle.properties` の `mod_version` と `CHANGELOG.md` の版が一致している
+- [ ] `gradle.properties` の `mod_version` と `CHANGELOG.md`・`CHANGELOG.ja.md` の版が一致している
 - [ ] AE2・GuideME の最新版を入れた状態で、開発環境の外（通常のランチャー）で起動できる
 - [ ] Applied Flux あり／なしの両方で起動できる
 - [ ] ゲーム内のスクリーンショット（セル、2 つの機械、ガイド）を撮った

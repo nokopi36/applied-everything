@@ -41,5 +41,5 @@
 - AE2 のテクスチャを元にしてよい（AE2 のアセットも CC BY-NC-SA 3.0）。元にしたファイルは `LICENSE-ASSETS` の一覧に追記する。AE2 の**コード**はコピーしない。
 - AE2 由来のテクスチャ（セル、圧縮機と刻印機の GUI、MOD のロゴ `logo.png`）は `tools/derive_ae2_textures.py`（Pillow 必須、AE2 の画像を塗り替え）、特異点・無限コア・圧縮機のブロックのテクスチャは `tools/generate_placeholder_textures.py` で生成。
 - 特異点圧縮機と刻印機のブロックモデル（`models/block/singularity_compressor*.json`、`imprinter*.json`）は `tools/generate_compressor_model.py` で生成する。blockstate とアイテム定義は `src/main/resources` に手書き（データ生成の対象外）。
-- CurseForge に入力する内容とアップロードの手順は `docs/release/curseforge.md`。版を上げたら `mod_version` と `CHANGELOG.md` を両方直す。
+- CurseForge に入力する内容とアップロードの手順は `docs/release/curseforge.md`。版を上げたら `mod_version` と `CHANGELOG.md`・`CHANGELOG.ja.md` を直す。
 - Modrinth は AI 生成コードがかなりの部分を占める場合に申告が必要（2026-08〜）。公開前に最新ルールを確認する。
