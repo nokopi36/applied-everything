@@ -4,6 +4,7 @@
 - Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
   and the rest moved to the centre
 - Icon of the bundled Applied Flux integration pack: the Infinity Energy Cell, enlarged
+- Mod logo (mod list and CurseForge project icon): the Infinity Cell, enlarged on a dark square
 - Imprinter GUI: AE2's inscriber GUI with one more slot (the fluid container) copied to the left of the bottom slot
 
 The results are derivative works of AE2's assets and are licensed under CC BY-NC-SA 3.0
@@ -38,6 +39,12 @@ ENERGY_BAND = [(170, 92, 14, 255), (236, 150, 30, 255), (255, 240, 170, 255)]
 
 # Where the bundled Applied Flux integration pack lives, relative to the project root
 PACK_ICON_DIR = 'src/main/resources/resourcepacks/appflux_compat'
+
+# Mod logo, relative to the project root. Referenced from neoforge.mods.toml
+LOGO_PATH = 'src/main/resources/logo.png'
+LOGO_SIZE = 400
+LOGO_SCALE = 20
+LOGO_BACKGROUND = (27, 21, 48, 255)
 
 
 def recolour(src, mapping):
@@ -86,10 +93,19 @@ def imprinter_gui(src):
     return im
 
 
+def logo(cell):
+    im = Image.new('RGBA', (LOGO_SIZE, LOGO_SIZE), LOGO_BACKGROUND)
+    big = cell.resize((cell.width * LOGO_SCALE, cell.height * LOGO_SCALE), Image.NEAREST)
+    offset = ((LOGO_SIZE - big.width) // 2, (LOGO_SIZE - big.height) // 2)
+    im.alpha_composite(big, offset)
+    return im
+
+
 def main():
     ae2_dir, out_dir = sys.argv[1], sys.argv[2]
     cell = f'{ae2_dir}/{CELL_SOURCE}'
-    recolour(cell, dict(zip(AE2_BAND, INFINITY_BAND))).save(f'{out_dir}/item/infinity_cell.png')
+    infinity_cell = recolour(cell, dict(zip(AE2_BAND, INFINITY_BAND)))
+    infinity_cell.save(f'{out_dir}/item/infinity_cell.png')
     recolour(cell, dict(zip(AE2_BAND, BLANK_BAND))).save(f'{out_dir}/item/blank_infinity_cell.png')
     recolour(cell, dict(zip(AE2_BAND, FLUID_BAND))).save(f'{out_dir}/item/infinity_fluid_cell.png')
     recolour(cell, dict(zip(AE2_BAND, BLANK_FLUID_BAND))).save(f'{out_dir}/item/blank_infinity_fluid_cell.png')
@@ -97,6 +113,7 @@ def main():
     energy_cell.save(f'{out_dir}/item/infinity_energy_cell.png')
     # Pack icons are shown at 32 px or more: enlarge without smoothing to keep the pixels sharp
     energy_cell.resize((128, 128), Image.NEAREST).save(f'{PACK_ICON_DIR}/pack.png')
+    logo(infinity_cell).save(LOGO_PATH)
 
     compressor_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/singularity_compressor.png')
     imprinter_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/imprinter.png')

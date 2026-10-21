@@ -41,3 +41,6 @@ repo/
 
 ### Reference sources (fetched by setup_refs.sh) ###
 refs/
+
+### Python ###
+__pycache__/
