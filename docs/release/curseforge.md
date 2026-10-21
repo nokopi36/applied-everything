@@ -45,6 +45,7 @@ is the same for every item - so choosing what your first cell is for is the hard
   **Infinity Imprinter**
 - In-game documentation in the AE2 guide (hold **G** over an item) - English and Japanese
 - JEI support
+- Jade / WTHIT / The One Probe: machine progress and what is being imprinted
 
 ## Requirements
 
@@ -81,7 +82,7 @@ AE2 のアドオンです。好きなアイテムを 1 種類、いくらでも�
 | Release type | Beta（AE2 がベータの間） |
 | Game versions | 26.1.2、NeoForge、Client、Server、Java 25 |
 | Changelog | `CHANGELOG.md` の該当バージョンの節 |
-| Related projects | Applied Energistics 2: Required Dependency / GuideME: Required Dependency / Applied Flux: Optional Dependency / JEI: Optional Dependency |
+| Related projects | Applied Energistics 2: Required Dependency / GuideME: Required Dependency / Applied Flux: Optional Dependency / JEI: Optional Dependency / Jade: Optional Dependency |
 
 3. 初回はモデレーションの審査がある（数日かかることがある）。審査が通ったら README にプロジェクトの URL を追記する
 

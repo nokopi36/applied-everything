@@ -13,6 +13,7 @@ import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
 import appeng.api.inventories.InternalInventory;
 import appeng.api.stacks.AEFluidKey;
+import appeng.api.stacks.AEKey;
 import appeng.api.stacks.AEItemKey;
 import appeng.blockentity.ServerTickingBlockEntity;
 import appeng.blockentity.grid.AENetworkedPoweredBlockEntity;
@@ -86,6 +87,27 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
             return (int) ((long) InfinityEnergyCellItem.getStoredFe(cell) * 100 / InfinityEnergyCellItem.CAPACITY_FE);
         }
         return (int) (consumedEnergy * 100 / ENERGY_PER_IMPRINT);
+    }
+
+    /** True while an Infinity Energy Cell sits in the cell slot to be charged. */
+    public boolean isChargingEnergyCell() {
+        return isEnergyCell(cellSlot.getStackInSlot(0));
+    }
+
+    /** The item or fluid being imprinted, or null if no imprint is under way. */
+    @Nullable
+    public AEKey getImprintTarget() {
+        if (consumedEnergy <= 0) {
+            return null;
+        }
+        var cell = cellSlot.getStackInSlot(0);
+        if (cell.is(ModItems.BLANK_INFINITY_CELL.get())) {
+            return AEItemKey.of(itemSlot.getStackInSlot(0));
+        }
+        if (cell.is(ModItems.BLANK_INFINITY_FLUID_CELL.get())) {
+            return tank.getFluid();
+        }
+        return null;
     }
 
     @Override

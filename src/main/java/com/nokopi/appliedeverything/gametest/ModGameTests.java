@@ -11,6 +11,7 @@ import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
 import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
+import com.nokopi.appliedeverything.integration.igtooltip.MachineTooltips;
 import com.nokopi.appliedeverything.ModDataComponents;
 import com.nokopi.appliedeverything.machine.FrameMachineBlock;
 import com.nokopi.appliedeverything.machine.ImprinterBlockEntity;
@@ -29,6 +30,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.gametest.framework.FunctionGameTestInstance;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -72,6 +74,8 @@ public final class ModGameTests {
             () -> ModGameTests::fluidCell);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ENERGY_CELL = TEST_FUNCTIONS.register("energy_cell",
             () -> ModGameTests::energyCell);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> MACHINE_TOOLTIPS = TEST_FUNCTIONS.register("machine_tooltips",
+            () -> ModGameTests::machineTooltips);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -101,6 +105,8 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(COMPRESSOR_AUTOMATION.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("fluid_cell"),
                 new FunctionGameTestInstance(FLUID_CELL.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        event.registerTest(id("machine_tooltips"),
+                new FunctionGameTestInstance(MACHINE_TOOLTIPS.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         if (ModItems.INFINITY_ENERGY_CELL != null) {
             event.registerTest(id("energy_cell"),
                     new FunctionGameTestInstance(ENERGY_CELL.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
@@ -282,6 +288,58 @@ public final class ModGameTests {
         helper.assertFalse(be.getCellSlot().insertItem(0, charged, false).isEmpty(), "Full cells are refused");
 
         helper.succeed();
+    }
+
+    static void machineTooltips(GameTestHelper helper) {
+        // Compressor: nothing while idle, the progress while compressing (400 ticks x 5,000 AE = 20 %)
+        var compressorPos = new BlockPos(0, 1, 0);
+        helper.setBlock(compressorPos, ModBlocks.SINGULARITY_COMPRESSOR.get());
+        var compressor = helper.getBlockEntity(compressorPos, SingularityCompressorBlockEntity.class);
+        var data = new CompoundTag();
+        MachineTooltips.compressorData(null, compressor, data);
+        helper.assertTrue(data.isEmpty(), "No tooltip data for an idle compressor: " + data);
+        compressor.getInput().setItemDirect(0, AEItems.SINGULARITY.stack(SingularityCompressorBlockEntity.SINGULARITIES_PER_OPERATION));
+        for (int i = 0; i < 400; i++) {
+            compressor.injectAEPower(compressor.getInternalMaxPower(), Actionable.MODULATE);
+            compressor.serverTick();
+        }
+        MachineTooltips.compressorData(null, compressor, data);
+        helper.assertValueEqual(data.getIntOr(MachineTooltips.TAG_PROGRESS, -1), 20, "compressor progress");
+
+        // Imprinter with an item: the item and the progress (half of the ticks = 50 %)
+        var itemPos = new BlockPos(2, 1, 0);
+        helper.setBlock(itemPos, ModBlocks.IMPRINTER.get());
+        var imprinter = helper.getBlockEntity(itemPos, ImprinterBlockEntity.class);
+        data = new CompoundTag();
+        MachineTooltips.imprinterData(null, imprinter, data);
+        helper.assertTrue(data.isEmpty(), "No tooltip data for an idle imprinter: " + data);
+        imprinter.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_CELL.get()));
+        imprinter.getItemSlot().setItemDirect(0, new ItemStack(Items.COBBLESTONE));
+        tickImprinter(imprinter, ImprinterBlockEntity.TICKS_PER_IMPRINT / 2);
+        MachineTooltips.imprinterData(null, imprinter, data);
+        helper.assertValueEqual(data.getStringOr(MachineTooltips.TAG_TARGET_ITEM, ""), "minecraft:cobblestone", "imprint target");
+        helper.assertValueEqual(data.getIntOr(MachineTooltips.TAG_PROGRESS, -1), 50, "imprinter progress");
+
+        // Imprinter with a fluid
+        var fluidPos = new BlockPos(4, 1, 0);
+        helper.setBlock(fluidPos, ModBlocks.IMPRINTER.get());
+        var fluidImprinter = helper.getBlockEntity(fluidPos, ImprinterBlockEntity.class);
+        fluidImprinter.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_FLUID_CELL.get()));
+        fluidImprinter.getTank().insert(0, AEFluidKey.of(Fluids.WATER), ImprintTank.CAPACITY, Actionable.MODULATE);
+        tickImprinter(fluidImprinter, 10);
+        data = new CompoundTag();
+        MachineTooltips.imprinterData(null, fluidImprinter, data);
+        helper.assertValueEqual(data.getStringOr(MachineTooltips.TAG_TARGET_FLUID, ""), "minecraft:water", "fluid imprint target");
+        helper.assertFalse(data.contains(MachineTooltips.TAG_TARGET_ITEM), "No item target for a fluid imprint");
+
+        helper.succeed();
+    }
+
+    private static void tickImprinter(ImprinterBlockEntity be, int ticks) {
+        for (int i = 0; i < ticks; i++) {
+            be.injectAEPower(be.getInternalMaxPower(), Actionable.MODULATE);
+            be.serverTick();
+        }
     }
 
     /** Ticks an imprinter with unlimited buffered power until it produces a cell; returns the ticks taken. */

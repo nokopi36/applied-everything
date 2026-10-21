@@ -10,6 +10,7 @@
 
 - Minecraft 26.1.2 / NeoForge
 - 任意: [Applied Flux](https://modrinth.com/mod/appflux) を入れると、FE を無限に供給する無限エネルギーセルが使えるようになる
+- Jade・WTHIT・The One Probe で、機械の進み具合が見られる（AE2 の仕組みを使うので、追加の依存はない）
 - ゲーム内の説明: AE2 のガイド（アイテムにカーソルを合わせて **G** を長押し）の「Applied Everything」
 
 ## モッドパック制作者向け

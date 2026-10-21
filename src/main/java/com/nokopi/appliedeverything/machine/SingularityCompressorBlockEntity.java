@@ -82,6 +82,11 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
         return upgrades;
     }
 
+    /** Progress of the current compression in percent. */
+    public int getProgressPercent() {
+        return (int) (consumedEnergy * 100 / ENERGY_PER_OPERATION);
+    }
+
     public double getConsumedEnergy() {
         return consumedEnergy;
     }

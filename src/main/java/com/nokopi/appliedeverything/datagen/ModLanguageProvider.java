@@ -7,6 +7,7 @@ import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
+import com.nokopi.appliedeverything.integration.igtooltip.MachineTooltips;
 import com.nokopi.appliedeverything.integration.jei.CompressionCategory;
 
 import net.minecraft.data.PackOutput;
@@ -37,5 +38,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "Infinity Cell: %s");
         add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "Infinite.");
         add(InfinityCellItem.TOOLTIP_BLANK_KEY, "Not imprinted");
+        add(MachineTooltips.PROGRESS_KEY, "Progress: %s%%");
+        add(MachineTooltips.IMPRINTING_KEY, "Imprinting: %s");
+        add(MachineTooltips.CHARGE_KEY, "Charge: %s%%");
     }
 }

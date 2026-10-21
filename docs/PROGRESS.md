@@ -35,7 +35,8 @@
 | 2026-10-21 | 刻印機を「無限刻印機 / Infinity Imprinter」に改名、無限エネルギーセルのガイドを Applied Flux 連携の内蔵リソースパックに分離（アイコン付き） | 次のコミット | runData は常に Applied Flux を入れる（入れないと生成ファイルが消える） |
 | 2026-10-21 | 機械のレシピ変更（中央をそんなに不思議じゃないキューブに、無限刻印機の四隅を圧縮特異点に） | 次のコミット | 無限刻印機は圧縮特異点 4 個が必要になり、圧縮機の後に作る流れになった |
 | 2026-10-21 | セルのツールチップを「Infinite. / 無限。」の 1 行に、ガイドの「入れると消える」の記述を削除 | 16ead23 | 「消滅」は誤解を招くため（ユーザー判断）。挙動そのものは変えていない |
-| 2026-10-21 | CurseForge 公開の準備（mods.toml の整理と URL・ロゴ、jar 名に MC バージョン、jar にライセンス同梱、CHANGELOG、`docs/release/curseforge.md`）。GitHub リポジトリを公開 | 次のコミット | テクスチャは仮のまま 1.0.0（Beta）で出す（ユーザー判断） |
+| 2026-10-21 | CurseForge 公開の準備（mods.toml の整理と URL・ロゴ、jar 名に MC バージョン、jar にライセンス同梱、CHANGELOG、`docs/release/curseforge.md`）。GitHub リポジトリを公開 | 94ef5ad | テクスチャは仮のまま 1.0.0（Beta）で出す（ユーザー判断） |
+| 2026-10-22 | Jade・WTHIT・The One Probe 対応（3.11）。圧縮機の進み具合、刻印機の対象と進み具合、エネルギーセルの充電を表示。`-Pjade` で開発環境に Jade | 次のコミット | AE2 の igtooltip API（Experimental）を使用。GameTest で表示用データを確認、ゲーム内の表示はユーザー確認待ち |
 
 ## 保留・課題
 - Applied Flux 1.0.2 が出たら、開発環境に常に入れる形へ戻す（build.gradle の -Pappflux）

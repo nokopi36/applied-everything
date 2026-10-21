@@ -15,5 +15,8 @@
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "未刻印",
   "tooltip.applied_everything.infinity_cell.supply": "無限。",
-  "tooltip.applied_everything.infinity_energy_cell.charge": "充電: %s / %s FE"
+  "tooltip.applied_everything.infinity_energy_cell.charge": "充電: %s / %s FE",
+  "tooltip.applied_everything.machine.charge": "充電: %s%%",
+  "tooltip.applied_everything.machine.imprinting": "刻印中: %s",
+  "tooltip.applied_everything.machine.progress": "進み具合: %s%%"
 }

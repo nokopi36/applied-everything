@@ -154,6 +154,12 @@ dependencies {
         localRuntime "maven.modrinth:glodium:${glodium_version}"
     }
 
+    // Dev-only, with -Pjade: to check the machine lines shown through AE2's in-game tooltip integration.
+    // The mod itself does not depend on Jade
+    if (project.hasProperty('jade')) {
+        localRuntime "maven.modrinth:jade:${jade_version}"
+    }
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"

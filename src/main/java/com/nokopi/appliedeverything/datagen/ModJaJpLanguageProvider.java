@@ -7,6 +7,7 @@ import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
+import com.nokopi.appliedeverything.integration.igtooltip.MachineTooltips;
 import com.nokopi.appliedeverything.integration.jei.CompressionCategory;
 
 import net.minecraft.data.PackOutput;
@@ -37,5 +38,8 @@ public class ModJaJpLanguageProvider extends LanguageProvider {
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "無限セル: %s");
         add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "無限。");
         add(InfinityCellItem.TOOLTIP_BLANK_KEY, "未刻印");
+        add(MachineTooltips.PROGRESS_KEY, "進み具合: %s%%");
+        add(MachineTooltips.IMPRINTING_KEY, "刻印中: %s");
+        add(MachineTooltips.CHARGE_KEY, "充電: %s%%");
     }
 }
