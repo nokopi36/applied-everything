@@ -7,6 +7,7 @@ import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 import com.nokopi.appliedeverything.imprint.FluidContainers;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
+import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
 
 import appeng.api.config.Actionable;
 import appeng.api.config.PowerMultiplier;
@@ -33,6 +34,8 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
     /** Ticks one imprint takes when power keeps up. */
     public static final int TICKS_PER_IMPRINT = 100;
     public static final double DRAW_PER_TICK = ENERGY_PER_IMPRINT / TICKS_PER_IMPRINT;
+    /** AE per tick pushed into an Infinity Energy Cell being charged. */
+    public static final double CHARGE_RATE_AE = 50_000;
 
     private final AppEngInternalInventory cellSlot = new AppEngInternalInventory(this, 1, 1, new CellFilter());
     private final AppEngInternalInventory itemSlot = new AppEngInternalInventory(this, 1, 64, new ItemFilter());
@@ -74,6 +77,15 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
 
     public double getConsumedEnergy() {
         return consumedEnergy;
+    }
+
+    /** Progress of the current job in percent: the imprint, or the charge of an Infinity Energy Cell. */
+    public int getProgressPercent() {
+        var cell = cellSlot.getStackInSlot(0);
+        if (isEnergyCell(cell)) {
+            return (int) ((long) InfinityEnergyCellItem.getStoredFe(cell) * 100 / InfinityEnergyCellItem.CAPACITY_FE);
+        }
+        return (int) (consumedEnergy * 100 / ENERGY_PER_IMPRINT);
     }
 
     @Override
@@ -118,6 +130,11 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
     public void serverTick() {
         emptyContainerIntoTank();
 
+        if (isEnergyCell(cellSlot.getStackInSlot(0))) {
+            chargeEnergyCell();
+            return;
+        }
+
         var result = pendingResult();
         if (result == null) {
             consumedEnergy = 0;
@@ -150,6 +167,36 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
             outputSlot.setItemDirect(0, result);
         }
         saveChanges();
+    }
+
+    /** Charges an Infinity Energy Cell from the network, and moves it to the output once full. */
+    private void chargeEnergyCell() {
+        var cell = cellSlot.getStackInSlot(0);
+        if (InfinityEnergyCellItem.isFullyCharged(cell)) {
+            FrameMachineBlock.setWorking(this, false);
+            if (outputSlot.getStackInSlot(0).isEmpty()) {
+                outputSlot.setItemDirect(0, cell);
+                cellSlot.setItemDirect(0, ItemStack.EMPTY);
+                saveChanges();
+            }
+            return;
+        }
+        var missingAe = (InfinityEnergyCellItem.CAPACITY_FE - InfinityEnergyCellItem.getStoredFe(cell)) / InfinityEnergyCellItem.FE_PER_AE;
+        var wanted = Math.min(CHARGE_RATE_AE, missingAe);
+        var got = extractAEPower(wanted, Actionable.MODULATE, PowerMultiplier.ONE);
+        if (got < wanted) {
+            var grid = getMainNode().getGrid();
+            if (grid != null) {
+                got += grid.getEnergyService().extractAEPower(wanted - got, Actionable.MODULATE, PowerMultiplier.ONE);
+            }
+        }
+        FrameMachineBlock.setWorking(this, got > 0);
+        if (got > 0) {
+            var charged = cell.copy();
+            InfinityEnergyCellItem.charge(charged, (long) Math.ceil(got * InfinityEnergyCellItem.FE_PER_AE), false);
+            cellSlot.setItemDirect(0, charged);
+            saveChanges();
+        }
     }
 
     /** Pours a filled container into the tank, leaving the empty container in its slot. */
@@ -185,8 +232,14 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
         consumedEnergy = data.getDoubleOr("consumed_energy", 0);
     }
 
+    private static boolean isEnergyCell(ItemStack stack) {
+        return ModItems.INFINITY_ENERGY_CELL != null && stack.is(ModItems.INFINITY_ENERGY_CELL.get());
+    }
+
+    /** Cells the imprinter works on: blank cells, and Infinity Energy Cells that still need charging. */
     private static boolean isBlankCell(ItemStack stack) {
-        return stack.is(ModItems.BLANK_INFINITY_CELL.get()) || stack.is(ModItems.BLANK_INFINITY_FLUID_CELL.get());
+        return stack.is(ModItems.BLANK_INFINITY_CELL.get()) || stack.is(ModItems.BLANK_INFINITY_FLUID_CELL.get())
+                || isEnergyCell(stack) && !InfinityEnergyCellItem.isFullyCharged(stack);
     }
 
     private static class CellFilter implements IAEItemFilter {

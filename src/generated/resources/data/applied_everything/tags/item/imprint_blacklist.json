@@ -6,6 +6,10 @@
     "applied_everything:infinity_cell",
     "applied_everything:blank_infinity_fluid_cell",
     "applied_everything:infinity_fluid_cell",
+    {
+      "id": "applied_everything:infinity_energy_cell",
+      "required": false
+    },
     "applied_everything:singularity_compressor",
     "applied_everything:imprinter",
     "ae2:singularity"

@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "appflux"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "applied_everything:compressed_singularity",
+    "D": {
+      "neoforge:ingredient_type": "neoforge:components",
+      "components": {
+        "ae2:stored_energy": 1600000.0
+      },
+      "items": "ae2:dense_energy_cell"
+    },
+    "I": "applied_everything:infinity_core",
+    "P": "ae2:cell_component_256k"
+  },
+  "pattern": [
+    "CPC",
+    "PIP",
+    "CPD"
+  ],
+  "result": {
+    "id": "applied_everything:infinity_energy_cell"
+  }
+}

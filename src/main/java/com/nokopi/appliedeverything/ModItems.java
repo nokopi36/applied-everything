@@ -2,11 +2,15 @@ package com.nokopi.appliedeverything;
 
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
+import com.nokopi.appliedeverything.integration.appflux.AppFluxIntegration;
+import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+
+import org.jetbrains.annotations.Nullable;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -26,6 +30,12 @@ public final class ModItems {
             p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final DeferredItem<InfinityFluidCellItem> INFINITY_FLUID_CELL = ITEMS.registerItem("infinity_fluid_cell",
             InfinityFluidCellItem::new, p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
+    /** Only exists when Applied Flux is installed. */
+    @Nullable
+    public static final DeferredItem<InfinityEnergyCellItem> INFINITY_ENERGY_CELL = AppFluxIntegration.isLoaded()
+            ? ITEMS.registerItem("infinity_energy_cell", InfinityEnergyCellItem::new,
+                    p -> p.stacksTo(1).rarity(Rarity.EPIC).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true))
+            : null;
     public static final DeferredItem<BlockItem> SINGULARITY_COMPRESSOR = ITEMS.registerSimpleBlockItem("singularity_compressor", ModBlocks.SINGULARITY_COMPRESSOR);
     public static final DeferredItem<BlockItem> IMPRINTER = ITEMS.registerSimpleBlockItem("imprinter", ModBlocks.IMPRINTER);
 

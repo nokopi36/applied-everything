@@ -7,11 +7,14 @@
   "item.applied_everything.infinity_cell": "無限セル",
   "item.applied_everything.infinity_cell.imprinted": "無限セル: %s",
   "item.applied_everything.infinity_core": "無限コア",
+  "item.applied_everything.infinity_energy_cell": "無限エネルギーセル",
+  "item.applied_everything.infinity_energy_cell.charging": "%s（%s%%）",
   "item.applied_everything.infinity_fluid_cell": "無限流体セル",
   "item.applied_everything.infinity_fluid_cell.imprinted": "無限流体セル: %s",
   "itemGroup.applied_everything": "Applied Everything",
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "未刻印",
   "tooltip.applied_everything.infinity_cell.supply": "いくらでも取り出せます",
-  "tooltip.applied_everything.infinity_cell.void": "入れたアイテムは消滅します"
+  "tooltip.applied_everything.infinity_cell.void": "入れたアイテムは消滅します",
+  "tooltip.applied_everything.infinity_energy_cell.charge": "充電: %s / %s FE"
 }

@@ -29,6 +29,13 @@ sourceSets.main.resources {
 repositories {
     // AE2 and GuideME are published on Maven Central
     mavenCentral()
+    // Applied Flux and Glodium are published on Modrinth's Maven
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
     maven {
         url = 'https://maven.blamejared.com/'
         content {
@@ -127,6 +134,15 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
+    // Applied Flux: compiled against for the optional Infinity Energy Cell.
+    // In the dev environment it is only added with -Pappflux: Applied Flux 1.0.1 crashes when the creative inventory
+    // is opened (it adds its block items to its tab twice; fixed upstream, not yet released).
+    compileOnly "maven.modrinth:appflux:${appflux_version}"
+    if (project.hasProperty('appflux')) {
+        localRuntime "maven.modrinth:appflux:${appflux_version}"
+        localRuntime "maven.modrinth:glodium:${glodium_version}"
+    }
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -165,6 +181,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_description        : mod_description,
             ae2_version_range      : ae2_version_range,
             guideme_version        : guideme_version,
+            appflux_version        : appflux_version,
     ]
     inputs.properties replaceProperties
     expand replaceProperties

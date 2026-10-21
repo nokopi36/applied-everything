@@ -60,3 +60,14 @@ The same, for a fluid. The blank cell is made like the blank Infinity Cell, with
 
 To imprint it, put it into the [Imprinter](imprinter.md) with 1,000 mB of the fluid in the tank. Fluids carrying
 extra data cannot be imprinted.
+
+## Infinity Energy Cell
+
+Only with the Applied Flux addon installed. It is made like the blank Infinity Cell, with a fully charged
+<ItemLink id="ae2:dense_energy_cell" /> instead of the item cell housing.
+
+A new cell has to be charged with **1,000,000,000 FE** (500,000,000 AE) before it works. Charge it in the
+[Imprinter](imprinter.md) (up to 50,000 AE/t), in AE2's <ItemLink id="ae2:charger" /> (up to 10,000 AE/t), or in any
+other mod's FE charger. Once full, it supplies unlimited FE to the network through Applied Flux. Applied Flux's Flux
+Accessor sends it on to machines from other mods. It also powers the ME network itself if Applied Flux's
+`flux_accessor.enable` setting is turned on (it is off by default).

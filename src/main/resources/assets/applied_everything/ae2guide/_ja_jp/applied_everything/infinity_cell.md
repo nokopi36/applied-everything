@@ -59,3 +59,14 @@ item_ids:
 
 [刻印機](imprinter.md) に、空の無限流体セルを入れ、タンクに液体を 1,000 mB 入れると刻印できます。
 データ付きの液体は刻印できません。
+
+## 無限エネルギーセル
+
+アドオンの Applied Flux が入っているときだけ使えます。空の無限セルのアイテムセルハウジングを、満充電の
+<ItemLink id="ae2:dense_energy_cell" /> に替えて作ります。
+
+作ったばかりのセルは、**1,000,000,000 FE**（500,000,000 AE）充電するまで使えません。[刻印機](imprinter.md)
+（毎ティック 50,000 AE まで）、AE2 の <ItemLink id="ae2:charger" />（毎ティック 10,000 AE まで）、ほかの MOD の FE 充電器で
+充電できます。満タンになると、Applied Flux を通じてネットワークに FE を無限に供給します。Applied Flux の
+Flux Accessor で、ほかの MOD の機械に送れます。Applied Flux の設定 `flux_accessor.enable` をオンにすると
+（初期値はオフ）、ME ネットワーク自体の電力にもなります。

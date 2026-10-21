@@ -7,6 +7,7 @@
 - mod_id: `applied_everything` / パッケージ: `com.nokopi.appliedeverything` / 作者: nokopi
 - 連携 MOD: Applied Energistics 2 26.1.13-beta（必須、Maven Central `org.appliedenergistics:appliedenergistics2`）、GuideME 26.1.15-beta（必須、Maven Central `org.appliedenergistics:guideme`）
 - JEI 29.47.0.109（maven.blamejared.com）: API を `compileOnly`（`integration/jei/` のプラグイン用。JEI がなくても MOD は動く）、本体を `localRuntime`（`runClient` 用。公開する MOD の依存にはならない）
+- Applied Flux 26.1-1.0.1（任意連携、Modrinth Maven）: `compileOnly`。開発環境で動かすのは `-Pappflux` を付けたときだけ（`./gradlew runClient -Pappflux` / `runGameTestServer -Pappflux`。Glodium も一緒に入る）。1.0.1 はクリエイティブのインベントリを開くとクラッシュする不具合があるため（上流で修正済み・未配布）。1.0.2 が出たら常に入れる形に戻す
 - ビルド: PATH の `java` は 1.8 なので、`JAVA_HOME` に Gradle が取得した JDK 25 を指定して実行する
   `export JAVA_HOME="$HOME/.gradle/jdks/eclipse_adoptium-25-amd64-windows.2" && ./gradlew build`
 - Gradle Wrapper: jar は公式 8.14 系と一致を確認済み（配布 URL は 9.2.1、`distributionSha256Sum` で固定）

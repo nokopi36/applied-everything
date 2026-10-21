@@ -19,6 +19,9 @@ public final class ModCreativeTabs {
                 output.accept(ModItems.INFINITY_CORE.get());
                 output.accept(ModItems.BLANK_INFINITY_CELL.get());
                 output.accept(ModItems.BLANK_INFINITY_FLUID_CELL.get());
+                if (ModItems.INFINITY_ENERGY_CELL != null) {
+                    output.accept(ModItems.INFINITY_ENERGY_CELL.get());
+                }
                 output.accept(ModItems.SINGULARITY_COMPRESSOR.get());
                 output.accept(ModItems.IMPRINTER.get());
             })

@@ -10,6 +10,8 @@ import com.nokopi.appliedeverything.cell.InfinityCellInventory;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
 import com.nokopi.appliedeverything.imprint.ImprintRules;
+import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
+import com.nokopi.appliedeverything.ModDataComponents;
 import com.nokopi.appliedeverything.machine.FrameMachineBlock;
 import com.nokopi.appliedeverything.machine.ImprinterBlockEntity;
 import com.nokopi.appliedeverything.machine.ImprintTank;
@@ -40,6 +42,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -67,6 +70,8 @@ public final class ModGameTests {
             () -> ModGameTests::compressorAutomation);
     public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> FLUID_CELL = TEST_FUNCTIONS.register("fluid_cell",
             () -> ModGameTests::fluidCell);
+    public static final DeferredHolder<Consumer<GameTestHelper>, Consumer<GameTestHelper>> ENERGY_CELL = TEST_FUNCTIONS.register("energy_cell",
+            () -> ModGameTests::energyCell);
 
     private static final Identifier EMPTY_STRUCTURE = id("empty");
 
@@ -96,6 +101,10 @@ public final class ModGameTests {
                 new FunctionGameTestInstance(COMPRESSOR_AUTOMATION.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
         event.registerTest(id("fluid_cell"),
                 new FunctionGameTestInstance(FLUID_CELL.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        if (ModItems.INFINITY_ENERGY_CELL != null) {
+            event.registerTest(id("energy_cell"),
+                    new FunctionGameTestInstance(ENERGY_CELL.getKey(), new TestData<>(environment, EMPTY_STRUCTURE, 20, 0, true)));
+        }
     }
 
     static void infinityCellStorage(GameTestHelper helper) {
@@ -230,6 +239,49 @@ public final class ModGameTests {
             helper.assertFalse(netBe.getOutputSlot().getStackInSlot(0).isEmpty(),
                     "No imprinted cell yet (network power), grid=" + netBe.getMainNode().getGrid() + " consumed=" + netBe.getConsumedEnergy());
         });
+    }
+
+    /** Runs only when Applied Flux is installed (it is in the dev environment). */
+    static void energyCell(GameTestHelper helper) {
+        var item = ModItems.INFINITY_ENERGY_CELL.get();
+        var source = IActionSource.empty();
+
+        // AE2's charger interface: 1 AE = 2 FE
+        var cell = new ItemStack(item);
+        helper.assertFalse(StorageCells.isCellHandled(cell), "An uncharged cell should not work as a cell");
+        helper.assertValueEqual(item.injectAEPower(cell, 1_000, Actionable.MODULATE), 0.0, "AE left over");
+        helper.assertValueEqual(InfinityEnergyCellItem.getStoredFe(cell), 2_000, "FE after 1,000 AE");
+
+        // Other mods' chargers: the FE capability takes everything and gives nothing back
+        var holder = new net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler(net.minecraft.core.NonNullList.of(ItemStack.EMPTY, cell));
+        var energy = ItemAccess.forHandlerIndex(holder, 0).getCapability(Capabilities.Energy.ITEM);
+        helper.assertTrue(energy != null, "The cell should accept FE");
+        try (var tx = Transaction.openRoot()) {
+            helper.assertValueEqual(energy.insert(InfinityEnergyCellItem.CAPACITY_FE, tx), InfinityEnergyCellItem.CAPACITY_FE - 2_000, "FE accepted");
+            helper.assertValueEqual(energy.extract(1_000, tx), 0, "FE extracted");
+            tx.commit();
+        }
+        var charged = holder.getResource(0).toStack(1);
+        helper.assertTrue(InfinityEnergyCellItem.isFullyCharged(charged), "The cell should be full");
+
+        // Once full it supplies unlimited FE through Applied Flux
+        var inv = StorageCells.getCellInventory(charged, null);
+        helper.assertTrue(inv != null, "A charged cell should work as a cell");
+        var fe = item.getImprintedKey(charged);
+        helper.assertValueEqual(inv.extract(fe, 1_000_000_000_000L, Actionable.MODULATE, source), 1_000_000_000_000L, "FE extracted from the cell");
+
+        // The imprinter charges an uncharged cell and moves it to the output once full
+        var pos = new BlockPos(0, 1, 0);
+        helper.setBlock(pos, ModBlocks.IMPRINTER.get());
+        var be = helper.getBlockEntity(pos, ImprinterBlockEntity.class);
+        var almostFull = new ItemStack(item);
+        almostFull.set(ModDataComponents.STORED_FE.get(), InfinityEnergyCellItem.CAPACITY_FE - 1_000);
+        helper.assertTrue(be.getCellSlot().insertItem(0, almostFull, false).isEmpty(), "Uncharged cells go into the cell slot");
+        helper.assertValueEqual(ticksToImprint(be) > 0, true, "The imprinter should finish charging");
+        helper.assertTrue(InfinityEnergyCellItem.isFullyCharged(be.getOutputSlot().getStackInSlot(0)), "The output should be full");
+        helper.assertFalse(be.getCellSlot().insertItem(0, charged, false).isEmpty(), "Full cells are refused");
+
+        helper.succeed();
     }
 
     /** Ticks an imprinter with unlimited buffered power until it produces a cell; returns the ticks taken. */

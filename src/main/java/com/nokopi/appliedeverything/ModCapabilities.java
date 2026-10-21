@@ -1,11 +1,14 @@
 package com.nokopi.appliedeverything;
 
+import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
+
 import appeng.api.AECapabilities;
 import appeng.api.networking.IInWorldGridNodeHost;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.transfer.energy.ItemAccessEnergyHandler;
 
 @EventBusSubscriber(modid = AppliedEverything.MODID)
 public final class ModCapabilities {
@@ -26,6 +29,13 @@ public final class ModCapabilities {
         event.registerBlockEntity(AECapabilities.IN_WORLD_GRID_NODE_HOST, imprinter, (be, context) -> (IInWorldGridNodeHost) be);
         event.registerBlockEntity(Capabilities.Energy.BLOCK, imprinter, (be, side) -> be.getEnergyStorage(side));
         event.registerBlockEntity(Capabilities.Item.BLOCK, imprinter, (be, side) -> be.getExposedItemHandler(side));
+        if (ModItems.INFINITY_ENERGY_CELL != null) {
+            // Other mods' chargers fill the uncharged cell with FE; nothing can be taken back out
+            event.registerItem(Capabilities.Energy.ITEM, (stack, access) -> new ItemAccessEnergyHandler(access,
+                    ModDataComponents.STORED_FE.get(), InfinityEnergyCellItem.CAPACITY_FE, InfinityEnergyCellItem.CAPACITY_FE, 0),
+                    ModItems.INFINITY_ENERGY_CELL.get());
+        }
+
         // AE2 turns this into a fluid handler, so pipes can fill the tank
         event.registerBlockEntity(AECapabilities.GENERIC_INTERNAL_INV, imprinter, (be, side) -> be.getTank());
     }

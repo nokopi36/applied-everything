@@ -31,6 +31,9 @@ public class AppliedEverythingClient {
     private void initClientRegistries(InitializeClientRegistriesEvent event) {
         StorageCellModels.registerModel(ModItems.INFINITY_CELL.get(), DRIVE_CELL_MODEL);
         StorageCellModels.registerModel(ModItems.INFINITY_FLUID_CELL.get(), DRIVE_CELL_MODEL);
+        if (ModItems.INFINITY_ENERGY_CELL != null) {
+            StorageCellModels.registerModel(ModItems.INFINITY_ENERGY_CELL.get(), DRIVE_CELL_MODEL);
+        }
     }
 
     private void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

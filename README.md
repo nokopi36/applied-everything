@@ -11,6 +11,7 @@ the same for every item.
 
 - Minecraft 26.1.2 / NeoForge
 - Requires Applied Energistics 2 and GuideME
+- Optional: [Applied Flux](https://modrinth.com/mod/appflux) adds the Infinity Energy Cell, which supplies unlimited FE
 - In-game documentation: open the AE2 guide (hold **G** over an item) and look for "Applied Everything"
 
 ## For Modpack Makers

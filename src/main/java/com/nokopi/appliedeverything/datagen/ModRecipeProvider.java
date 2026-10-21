@@ -4,7 +4,9 @@ import java.util.concurrent.CompletableFuture;
 
 import com.nokopi.appliedeverything.AppliedEverything;
 import com.nokopi.appliedeverything.ModItems;
+import com.nokopi.appliedeverything.integration.appflux.AppFluxIntegration;
 
+import appeng.api.ids.AEComponents;
 import appeng.core.definitions.AEBlocks;
 import appeng.core.definitions.AEItems;
 import net.minecraft.core.HolderLookup;
@@ -15,8 +17,13 @@ import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.conditions.ModLoadedCondition;
+import net.neoforged.neoforge.common.crafting.DataComponentIngredient;
 
 public class ModRecipeProvider extends RecipeProvider {
+    /** AE2's dense energy cell holds this much AE when full. */
+    private static final double DENSE_ENERGY_CELL_CAPACITY = 1_600_000;
+
     protected ModRecipeProvider(HolderLookup.Provider provider, RecipeOutput output) {
         super(provider, output);
     }
@@ -69,6 +76,23 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('F', AEItems.FLUID_CELL_HOUSING)
                 .unlockedBy("has_infinity_core", this.has(ModItems.INFINITY_CORE.get()))
                 .save(this.output);
+
+        if (ModItems.INFINITY_ENERGY_CELL != null) {
+            // Same as the blank Infinity Cell, with a fully charged dense energy cell instead of the item cell housing.
+            // Only loaded when Applied Flux is installed.
+            var fullDenseCell = DataComponentIngredient.of(false, AEComponents.STORED_ENERGY,
+                    DENSE_ENERGY_CELL_CAPACITY, AEBlocks.DENSE_ENERGY_CELL);
+            ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.INFINITY_ENERGY_CELL.get())
+                    .pattern("CPC")
+                    .pattern("PIP")
+                    .pattern("CPD")
+                    .define('I', ModItems.INFINITY_CORE.get())
+                    .define('P', AEItems.CELL_COMPONENT_256K)
+                    .define('C', ModItems.COMPRESSED_SINGULARITY.get())
+                    .define('D', fullDenseCell)
+                    .unlockedBy("has_infinity_core", this.has(ModItems.INFINITY_CORE.get()))
+                    .save(this.output.withConditions(new ModLoadedCondition(AppFluxIntegration.MOD_ID)));
+        }
 
         // Imprinting happens in the Imprinter, not in a crafting grid
         ShapedRecipeBuilder.shaped(items, RecipeCategory.MISC, ModItems.IMPRINTER.get())

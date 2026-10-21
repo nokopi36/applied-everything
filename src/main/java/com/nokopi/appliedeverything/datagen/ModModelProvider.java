@@ -42,5 +42,8 @@ public class ModModelProvider extends ModelProvider {
         itemModels.generateFlatItem(ModItems.INFINITY_CELL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.BLANK_INFINITY_FLUID_CELL.get(), ModelTemplates.FLAT_ITEM);
         itemModels.generateFlatItem(ModItems.INFINITY_FLUID_CELL.get(), ModelTemplates.FLAT_ITEM);
+        if (ModItems.INFINITY_ENERGY_CELL != null) {
+            itemModels.generateFlatItem(ModItems.INFINITY_ENERGY_CELL.get(), ModelTemplates.FLAT_ITEM);
+        }
     }
 }

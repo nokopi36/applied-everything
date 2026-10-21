@@ -7,7 +7,10 @@ import appeng.api.stacks.AEItemKey;
 import appeng.api.stacks.AEKey;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import com.mojang.serialization.Codec;
+
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -26,6 +29,10 @@ public final class ModDataComponents {
     /** The fluid an Infinity Fluid Cell supplies. */
     public static final Supplier<DataComponentType<AEFluidKey>> IMPRINTED_FLUID = DATA_COMPONENTS.registerComponentType("imprinted_fluid",
             builder -> builder.persistent(AEFluidKey.CODEC).networkSynchronized(FLUID_KEY_STREAM_CODEC));
+
+    /** FE stored in an uncharged Infinity Energy Cell. */
+    public static final Supplier<DataComponentType<Integer>> STORED_FE = DATA_COMPONENTS.registerComponentType("stored_fe",
+            builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
     private static <K extends AEKey> StreamCodec<RegistryFriendlyByteBuf, K> narrow(Class<K> keyClass) {
         return AEKey.STREAM_CODEC.map(key -> {

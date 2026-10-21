@@ -7,11 +7,14 @@
   "item.applied_everything.infinity_cell": "Infinity Cell",
   "item.applied_everything.infinity_cell.imprinted": "Infinity Cell: %s",
   "item.applied_everything.infinity_core": "Infinity Core",
+  "item.applied_everything.infinity_energy_cell": "Infinity Energy Cell",
+  "item.applied_everything.infinity_energy_cell.charging": "%s (%s%%)",
   "item.applied_everything.infinity_fluid_cell": "Infinity Fluid Cell",
   "item.applied_everything.infinity_fluid_cell.imprinted": "Infinity Fluid Cell: %s",
   "itemGroup.applied_everything": "Applied Everything",
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "Not imprinted",
   "tooltip.applied_everything.infinity_cell.supply": "Unlimited supply",
-  "tooltip.applied_everything.infinity_cell.void": "Inserted items are voided"
+  "tooltip.applied_everything.infinity_cell.void": "Inserted items are voided",
+  "tooltip.applied_everything.infinity_energy_cell.charge": "Charge: %s / %s FE"
 }

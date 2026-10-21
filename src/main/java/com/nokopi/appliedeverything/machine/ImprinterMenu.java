@@ -28,7 +28,7 @@ public class ImprinterMenu extends AEBaseMenu implements IProgressProvider {
     private final ImprinterBlockEntity host;
 
     @GuiSync(0)
-    public double consumedEnergy;
+    public int progressPercent;
 
     public ImprinterMenu(int id, Inventory playerInventory, ImprinterBlockEntity host) {
         super(TYPE, id, playerInventory, host);
@@ -44,14 +44,14 @@ public class ImprinterMenu extends AEBaseMenu implements IProgressProvider {
     @Override
     public void broadcastChanges() {
         if (isServerSide()) {
-            this.consumedEnergy = host.getConsumedEnergy();
+            this.progressPercent = host.getProgressPercent();
         }
         super.broadcastChanges();
     }
 
     @Override
     public int getCurrentProgress() {
-        return (int) (consumedEnergy * 100 / ImprinterBlockEntity.ENERGY_PER_IMPRINT);
+        return progressPercent;
     }
 
     @Override

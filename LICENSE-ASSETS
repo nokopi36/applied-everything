@@ -19,5 +19,6 @@ Derived textures (changes: recoloured):
   textures/item/infinity_cell.png                   - based on AE2's creative_storage_cell.png
   textures/item/blank_infinity_fluid_cell.png       - based on AE2's creative_storage_cell.png
   textures/item/infinity_fluid_cell.png             - based on AE2's creative_storage_cell.png
+  textures/item/infinity_energy_cell.png            - based on AE2's creative_storage_cell.png
   textures/gui/singularity_compressor.png           - based on AE2's guis/inscriber.png (press slots removed, centred)
   textures/gui/imprinter.png                        - based on AE2's guis/inscriber.png (one slot added)

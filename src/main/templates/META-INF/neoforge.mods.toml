@@ -99,3 +99,10 @@ ${mod_description}
     versionRange="[${guideme_version},)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="appflux"
+    type="optional"
+    versionRange="[${appflux_version},)"
+    ordering="AFTER"
+    side="BOTH"

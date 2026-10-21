@@ -6,6 +6,7 @@ import com.nokopi.appliedeverything.ModCreativeTabs;
 import com.nokopi.appliedeverything.ModItems;
 import com.nokopi.appliedeverything.cell.InfinityCellItem;
 import com.nokopi.appliedeverything.cell.InfinityFluidCellItem;
+import com.nokopi.appliedeverything.integration.appflux.InfinityEnergyCellItem;
 import com.nokopi.appliedeverything.integration.jei.CompressionCategory;
 
 import net.minecraft.data.PackOutput;
@@ -28,6 +29,10 @@ public class ModJaJpLanguageProvider extends LanguageProvider {
         add(CompressionCategory.ENERGY_KEY, "%s AE");
         addItem(ModItems.BLANK_INFINITY_FLUID_CELL, "空の無限流体セル");
         addItem(ModItems.INFINITY_FLUID_CELL, "無限流体セル");
+        // Written even without Applied Flux, so the language files do not depend on what was installed at datagen time
+        add("item.applied_everything.infinity_energy_cell", "無限エネルギーセル");
+        add(InfinityEnergyCellItem.CHARGING_NAME_KEY, "%s（%s%%）");
+        add(InfinityEnergyCellItem.TOOLTIP_CHARGE_KEY, "充電: %s / %s FE");
         add(InfinityFluidCellItem.IMPRINTED_NAME_KEY, "無限流体セル: %s");
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "無限セル: %s");
         add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "いくらでも取り出せます");
