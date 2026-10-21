@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 
 import com.nokopi.appliedeverything.cell.InfinityCellHandler;
 import com.nokopi.appliedeverything.gametest.ModGameTests;
+import com.nokopi.appliedeverything.integration.appflux.AppFluxIntegration;
 import com.nokopi.appliedeverything.machine.SingularityCompressorBlockEntity;
 
 import appeng.api.storage.StorageCells;
@@ -31,6 +32,7 @@ public class AppliedEverything {
         ModGameTests.TEST_FUNCTIONS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(AppFluxIntegration::addPacks);
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

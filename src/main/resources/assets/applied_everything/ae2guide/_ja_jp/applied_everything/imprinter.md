@@ -1,14 +1,14 @@
 ---
 navigation:
   parent: applied_everything/index.md
-  title: 刻印機
+  title: 無限刻印機
   icon: imprinter
   position: 15
 item_ids:
 - imprinter
 ---
 
-# 刻印機
+# 無限刻印機
 
 <BlockImage id="imprinter" scale="6" />
 

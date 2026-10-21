@@ -3,6 +3,7 @@
 - Infinity Cells, Infinity Fluid Cells and the Infinity Energy Cell: AE2's creative storage cell with the band recoloured
 - Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
   and the rest moved to the centre
+- Icon of the bundled Applied Flux integration pack: the Infinity Energy Cell, enlarged
 - Imprinter GUI: AE2's inscriber GUI with one more slot (the fluid container) copied to the left of the bottom slot
 
 The results are derivative works of AE2's assets and are licensed under CC BY-NC-SA 3.0
@@ -34,6 +35,10 @@ BLANK_FLUID_BAND = [(30, 48, 68, 255), (42, 68, 92, 255), (56, 88, 118, 255)]
 
 # Infinity Energy Cell: amber band with white-hot highlights
 ENERGY_BAND = [(170, 92, 14, 255), (236, 150, 30, 255), (255, 240, 170, 255)]
+
+# Where the bundled Applied Flux integration pack lives, relative to the project root
+PACK_ICON_DIR = 'src/main/resources/resourcepacks/appflux_compat'
+
 
 def recolour(src, mapping):
     im = Image.open(src).convert('RGBA')
@@ -88,7 +93,10 @@ def main():
     recolour(cell, dict(zip(AE2_BAND, BLANK_BAND))).save(f'{out_dir}/item/blank_infinity_cell.png')
     recolour(cell, dict(zip(AE2_BAND, FLUID_BAND))).save(f'{out_dir}/item/infinity_fluid_cell.png')
     recolour(cell, dict(zip(AE2_BAND, BLANK_FLUID_BAND))).save(f'{out_dir}/item/blank_infinity_fluid_cell.png')
-    recolour(cell, dict(zip(AE2_BAND, ENERGY_BAND))).save(f'{out_dir}/item/infinity_energy_cell.png')
+    energy_cell = recolour(cell, dict(zip(AE2_BAND, ENERGY_BAND)))
+    energy_cell.save(f'{out_dir}/item/infinity_energy_cell.png')
+    # Pack icons are shown at 32 px or more: enlarge without smoothing to keep the pixels sharp
+    energy_cell.resize((128, 128), Image.NEAREST).save(f'{PACK_ICON_DIR}/pack.png')
 
     compressor_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/singularity_compressor.png')
     imprinter_gui(f'{ae2_dir}/guis/inscriber.png').save(f'{out_dir}/gui/imprinter.png')

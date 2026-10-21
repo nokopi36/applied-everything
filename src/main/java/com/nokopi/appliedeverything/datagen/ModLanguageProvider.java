@@ -25,7 +25,7 @@ public class ModLanguageProvider extends LanguageProvider {
         addItem(ModItems.BLANK_INFINITY_CELL, "Blank Infinity Cell");
         addItem(ModItems.INFINITY_CELL, "Infinity Cell");
         addBlock(ModBlocks.SINGULARITY_COMPRESSOR, "Singularity Compressor");
-        addBlock(ModBlocks.IMPRINTER, "Imprinter");
+        addBlock(ModBlocks.IMPRINTER, "Infinity Imprinter");
         add(CompressionCategory.ENERGY_KEY, "%s AE");
         addItem(ModItems.BLANK_INFINITY_FLUID_CELL, "Blank Infinity Fluid Cell");
         addItem(ModItems.INFINITY_FLUID_CELL, "Infinity Fluid Cell");

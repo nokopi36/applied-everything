@@ -137,8 +137,9 @@ dependencies {
     // Applied Flux: compiled against for the optional Infinity Energy Cell.
     // In the dev environment it is only added with -Pappflux: Applied Flux 1.0.1 crashes when the creative inventory
     // is opened (it adds its block items to its tab twice; fixed upstream, not yet released).
+    // Data generation always gets it, so the Infinity Energy Cell's generated files do not depend on the flag.
     compileOnly "maven.modrinth:appflux:${appflux_version}"
-    if (project.hasProperty('appflux')) {
+    if (project.hasProperty('appflux') || gradle.startParameter.taskNames.any { it.contains('runData') }) {
         localRuntime "maven.modrinth:appflux:${appflux_version}"
         localRuntime "maven.modrinth:glodium:${glodium_version}"
     }

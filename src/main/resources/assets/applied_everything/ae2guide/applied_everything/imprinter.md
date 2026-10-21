@@ -1,18 +1,18 @@
 ---
 navigation:
   parent: applied_everything/index.md
-  title: Imprinter
+  title: Infinity Imprinter
   icon: imprinter
   position: 15
 item_ids:
 - imprinter
 ---
 
-# Imprinter
+# Infinity Imprinter
 
 <BlockImage id="imprinter" scale="6" />
 
-The Imprinter turns a blank cell into an Infinity Cell. Each imprint takes **5 seconds** and **100,000 AE**, drawn from
+The Infinity Imprinter turns a blank cell into an Infinity Cell. Each imprint takes **5 seconds** and **100,000 AE**, drawn from
 the ME network it is connected to or from FE cables attached directly to it.
 
 ## Slots
@@ -28,7 +28,7 @@ the ME network it is connected to or from FE cables attached directly to it.
 Items and fluids that cannot be imprinted do not go into the item slot or the tank. While a blank fluid cell waits, the
 item slot refuses items, and while a blank item cell waits, the tank and the container slot refuse fluids.
 
-With Applied Flux installed, an uncharged Infinity Energy Cell can also be put into the cell slot. The Imprinter charges it
+With Applied Flux installed, an uncharged Infinity Energy Cell can also be put into the cell slot. The Infinity Imprinter charges it
 from the network at up to 50,000 AE/t and moves it to the output once full.
 
 ## Automation

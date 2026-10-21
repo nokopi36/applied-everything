@@ -1,8 +1,8 @@
 Applied Everything - License for assets
 
 All assets in src/main/resources/assets/applied_everything/ and
-src/main/resources/assets/ae2/screens/applied_everything/ (textures, models, language files, screen
-layouts and other resources) are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike
+src/main/resources/assets/ae2/screens/applied_everything/ and src/main/resources/resourcepacks/ (textures,
+models, language files, screen layouts, guide pages and other resources) are licensed under the Creative Commons Attribution-NonCommercial-ShareAlike
 3.0 Unported License (CC BY-NC-SA 3.0).
 
   https://creativecommons.org/licenses/by-nc-sa/3.0/
@@ -20,5 +20,6 @@ Derived textures (changes: recoloured):
   textures/item/blank_infinity_fluid_cell.png       - based on AE2's creative_storage_cell.png
   textures/item/infinity_fluid_cell.png             - based on AE2's creative_storage_cell.png
   textures/item/infinity_energy_cell.png            - based on AE2's creative_storage_cell.png
+  resourcepacks/appflux_compat/pack.png             - based on AE2's creative_storage_cell.png (enlarged)
   textures/gui/singularity_compressor.png           - based on AE2's guis/inscriber.png (press slots removed, centred)
   textures/gui/imprinter.png                        - based on AE2's guis/inscriber.png (one slot added)
