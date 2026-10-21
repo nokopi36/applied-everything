@@ -12,7 +12,7 @@ CurseForge のプロジェクト作成画面に入力する内容と、ファイ
 | Main category | Applied Energistics 2 |
 | Additional categories | Storage、Technology |
 | License | Custom（下の「ライセンスの文面」を貼る） |
-| Project avatar | `src/main/resources/logo.png`（400×400） |
+| Project avatar | `src/main/resources/logo.png`（400×400、背景透過） |
 | Source | https://github.com/nokopi36/applied-everything |
 | Issues | https://github.com/nokopi36/applied-everything/issues |
 

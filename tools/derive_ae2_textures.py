@@ -4,7 +4,7 @@
 - Singularity Compressor GUI: AE2's inscriber GUI with the two press slots and their arrows removed,
   and the rest moved to the centre
 - Icon of the bundled Applied Flux integration pack: the Infinity Energy Cell, enlarged
-- Mod logo (mod list and CurseForge project icon): the Infinity Cell, enlarged on a dark square
+- Mod logo (mod list and CurseForge project icon): the Infinity Cell, enlarged on a transparent square
 - Imprinter GUI: AE2's inscriber GUI with one more slot (the fluid container) copied to the left of the bottom slot
 
 The results are derivative works of AE2's assets and are licensed under CC BY-NC-SA 3.0
@@ -44,7 +44,7 @@ PACK_ICON_DIR = 'src/main/resources/resourcepacks/appflux_compat'
 LOGO_PATH = 'src/main/resources/logo.png'
 LOGO_SIZE = 400
 LOGO_SCALE = 20
-LOGO_BACKGROUND = (27, 21, 48, 255)
+LOGO_BACKGROUND = (0, 0, 0, 0)
 
 
 def recolour(src, mapping):
