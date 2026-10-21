@@ -14,7 +14,6 @@
   "itemGroup.applied_everything": "Applied Everything",
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "未刻印",
-  "tooltip.applied_everything.infinity_cell.supply": "いくらでも取り出せます",
-  "tooltip.applied_everything.infinity_cell.void": "入れたアイテムは消滅します",
+  "tooltip.applied_everything.infinity_cell.supply": "無限。",
   "tooltip.applied_everything.infinity_energy_cell.charge": "充電: %s / %s FE"
 }

@@ -14,7 +14,6 @@
   "itemGroup.applied_everything": "Applied Everything",
   "jei.applied_everything.singularity_compression.energy": "%s AE",
   "tooltip.applied_everything.infinity_cell.not_imprinted": "Not imprinted",
-  "tooltip.applied_everything.infinity_cell.supply": "Unlimited supply",
-  "tooltip.applied_everything.infinity_cell.void": "Inserted items are voided",
+  "tooltip.applied_everything.infinity_cell.supply": "Infinite.",
   "tooltip.applied_everything.infinity_energy_cell.charge": "Charge: %s / %s FE"
 }

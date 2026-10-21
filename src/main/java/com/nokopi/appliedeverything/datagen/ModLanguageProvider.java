@@ -35,8 +35,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(InfinityEnergyCellItem.TOOLTIP_CHARGE_KEY, "Charge: %s / %s FE");
         add(InfinityFluidCellItem.IMPRINTED_NAME_KEY, "Infinity Fluid Cell: %s");
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "Infinity Cell: %s");
-        add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "Unlimited supply");
-        add(InfinityCellItem.TOOLTIP_VOID_KEY, "Inserted items are voided");
+        add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "Infinite.");
         add(InfinityCellItem.TOOLTIP_BLANK_KEY, "Not imprinted");
     }
 }

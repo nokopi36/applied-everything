@@ -19,7 +19,6 @@ import net.minecraft.world.item.component.TooltipDisplay;
 public class InfinityCellItem extends Item implements ImprintedCell {
     public static final String IMPRINTED_NAME_KEY = "item.applied_everything.infinity_cell.imprinted";
     public static final String TOOLTIP_SUPPLY_KEY = "tooltip.applied_everything.infinity_cell.supply";
-    public static final String TOOLTIP_VOID_KEY = "tooltip.applied_everything.infinity_cell.void";
     public static final String TOOLTIP_BLANK_KEY = "tooltip.applied_everything.infinity_cell.not_imprinted";
 
     public InfinityCellItem(Properties properties) {
@@ -60,6 +59,5 @@ public class InfinityCellItem extends Item implements ImprintedCell {
             return;
         }
         lines.accept(Component.translatable(TOOLTIP_SUPPLY_KEY).withStyle(ChatFormatting.GRAY));
-        lines.accept(Component.translatable(TOOLTIP_VOID_KEY).withStyle(ChatFormatting.GRAY));
     }
 }

@@ -35,8 +35,7 @@ public class ModJaJpLanguageProvider extends LanguageProvider {
         add(InfinityEnergyCellItem.TOOLTIP_CHARGE_KEY, "充電: %s / %s FE");
         add(InfinityFluidCellItem.IMPRINTED_NAME_KEY, "無限流体セル: %s");
         add(InfinityCellItem.IMPRINTED_NAME_KEY, "無限セル: %s");
-        add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "いくらでも取り出せます");
-        add(InfinityCellItem.TOOLTIP_VOID_KEY, "入れたアイテムは消滅します");
+        add(InfinityCellItem.TOOLTIP_SUPPLY_KEY, "無限。");
         add(InfinityCellItem.TOOLTIP_BLANK_KEY, "未刻印");
     }
 }

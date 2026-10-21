@@ -76,7 +76,6 @@ public class InfinityEnergyCellItem extends Item implements ImprintedCell, IAEIt
             Consumer<Component> lines, TooltipFlag flag) {
         if (isFullyCharged(stack)) {
             lines.accept(Component.translatable(InfinityCellItem.TOOLTIP_SUPPLY_KEY).withStyle(ChatFormatting.GRAY));
-            lines.accept(Component.translatable(InfinityCellItem.TOOLTIP_VOID_KEY).withStyle(ChatFormatting.GRAY));
             return;
         }
         lines.accept(Component.translatable(TOOLTIP_CHARGE_KEY, String.format("%,d", getStoredFe(stack)),

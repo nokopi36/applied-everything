@@ -42,7 +42,6 @@ These items cannot be imprinted:
 ## In the Network
 
 * Extracting the imprinted item always succeeds.
-* Inserting the imprinted item voids it, like AE2's creative cell.
 * Other items are not accepted.
 * The cell cannot be placed inside other cells, such as portable cells.
 

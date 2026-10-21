@@ -57,6 +57,5 @@ public class InfinityFluidCellItem extends Item implements ImprintedCell {
             return;
         }
         lines.accept(Component.translatable(InfinityCellItem.TOOLTIP_SUPPLY_KEY).withStyle(ChatFormatting.GRAY));
-        lines.accept(Component.translatable(InfinityCellItem.TOOLTIP_VOID_KEY).withStyle(ChatFormatting.GRAY));
     }
 }
