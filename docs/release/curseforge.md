@@ -79,6 +79,10 @@ See the [README](https://github.com/nokopi36/applied-everything#for-modpack-make
 詳しくは [README](https://github.com/nokopi36/applied-everything/blob/main/README.ja.md#モッドパック制作者向け) を見てください。
 ```
 
+## 画像（Media）
+
+`docs/media/` に、JEI のレシピ画面を切り出した画像を置いている（英語の画面、2026-10-22 撮影）。レシピや数値を変えたら撮り直す。
+
 ## ファイルのアップロード
 
 1. `./gradlew build` を実行し、`build/libs/applied_everything-neoforge-26.1.2-<version>.jar` を作る
