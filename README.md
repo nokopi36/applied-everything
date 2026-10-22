@@ -9,6 +9,7 @@ imprinted, as long as you can pay for the cell.
 There are no modes, no limits to configure and no way to change an imprint later. The cost is the cell itself, and it is
 the same for every item.
 
+- Download: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/applied-everything)
 - Minecraft 26.1.2 / NeoForge
 - Requires Applied Energistics 2 and GuideME
 - Optional: [Applied Flux](https://modrinth.com/mod/appflux) adds the Infinity Energy Cell, which supplies unlimited FE

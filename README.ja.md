@@ -8,7 +8,9 @@
 
 モードの切り替えも上限の設定もなく、あとから刻印を変えることもできません。コストはセルそのもので、どのアイテムでも同じです。
 
+- ダウンロード: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/applied-everything)
 - Minecraft 26.1.2 / NeoForge
+- 必須: Applied Energistics 2 と GuideME
 - 任意: [Applied Flux](https://modrinth.com/mod/appflux) を入れると、FE を無限に供給する無限エネルギーセルが使えるようになる
 - Jade・WTHIT・The One Probe で、機械の進み具合が見られる（AE2 の仕組みを使うので、追加の依存はない）
 - ゲーム内の説明: AE2 のガイド（アイテムにカーソルを合わせて **G** を長押し）の「Applied Everything」

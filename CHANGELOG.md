@@ -2,6 +2,10 @@
 
 [日本語](CHANGELOG.ja.md)
 
+## Unreleased
+
+- Server config for the machine costs and the Infinity Energy Cell capacity
+
 ## 1.0.0 - Minecraft 26.1.2
 
 First release.
@@ -15,4 +19,3 @@ First release.
 - Jade / WTHIT / The One Probe: machine progress and the item or fluid being imprinted
 - Guide pages in the AE2 guide (English and Japanese)
 - Item and fluid tags `applied_everything:imprint_blacklist` for modpack makers
-- Server config for the machine costs and the Infinity Energy Cell capacity

@@ -1,5 +1,7 @@
 # CurseForge 公開メモ
 
+プロジェクト: https://www.curseforge.com/minecraft/mc-mods/applied-everything（1.0.0 を 2026-10-22 に公開）
+
 CurseForge のプロジェクト作成画面に入力する内容と、ファイルをアップロードする手順。
 
 ## プロジェクトの設定
