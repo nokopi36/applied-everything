@@ -11,8 +11,8 @@
 - 3.9 無限エネルギーセル 完了（2026-10-21）
 - 3.11 Jade などの表示 完了（2026-10-22）
 - 3.12 サーバー設定 完了（2026-10-22）
-- 1.0.0 を CurseForge で公開（2026-10-22、https://www.curseforge.com/minecraft/mc-mods/applied-everything）。サーバー設定は 1.0.0 に入っていない（CHANGELOG の「未リリース」）
-- 次にやること: 遊んで数値調整、正式テクスチャ、次の版（サーバー設定入り）の公開、Modrinth への公開
+- 1.0.0 を CurseForge で公開（2026-10-22、https://www.curseforge.com/minecraft/mc-mods/applied-everything）。サーバー設定は 1.1.0 で配布
+- 次にやること: 遊んで数値調整、正式テクスチャ、1.1.0 のアップロード、Modrinth への公開
 
 ## 完了
 | 日付 | 機能 | コミット | メモ |

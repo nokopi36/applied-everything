@@ -2,7 +2,7 @@
 
 [日本語](CHANGELOG.ja.md)
 
-## Unreleased
+## 1.1.0 - Minecraft 26.1.2
 
 - Server config for the machine costs and the Infinity Energy Cell capacity
 
