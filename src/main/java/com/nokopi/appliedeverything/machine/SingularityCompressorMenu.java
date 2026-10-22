@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything.machine;
 
+import com.nokopi.appliedeverything.ModServerConfig;
 import com.nokopi.appliedeverything.AppliedEverything;
 
 import appeng.menu.SlotSemantics;
@@ -45,6 +46,6 @@ public class SingularityCompressorMenu extends UpgradeableMenu<SingularityCompre
 
     @Override
     public int getMaxProgress() {
-        return (int) (SingularityCompressorBlockEntity.ENERGY_PER_OPERATION / PROGRESS_UNIT);
+        return (int) (ModServerConfig.energyPerCompression() / PROGRESS_UNIT);
     }
 }

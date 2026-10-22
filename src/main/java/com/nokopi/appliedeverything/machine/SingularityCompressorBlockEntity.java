@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything.machine;
 
+import com.nokopi.appliedeverything.ModServerConfig;
 import java.util.List;
 
 import com.nokopi.appliedeverything.ModBlocks;
@@ -29,14 +30,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEntity
         implements ServerTickingBlockEntity, IUpgradeableObject {
-    /** AE consumed by one compression. */
-    public static final double ENERGY_PER_OPERATION = 10_000_000;
-    /** Singularities consumed by one compression. */
-    public static final int SINGULARITIES_PER_OPERATION = 9;
-    /** AE drawn per tick without acceleration cards. */
-    public static final double BASE_DRAW_PER_TICK = 5_000;
-    /** Additional AE drawn per tick for each installed acceleration card. */
-    public static final double DRAW_PER_CARD = 5_000;
+    // Singularities and AE per compression and the draw per tick are in ModServerConfig
     public static final int MAX_ACCELERATION_CARDS = 4;
     /** The internal buffer holds this many ticks of the current draw, so large amounts cannot be stockpiled. */
     public static final int BUFFER_TICKS = 2;
@@ -84,7 +78,7 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
 
     /** Progress of the current compression in percent. */
     public int getProgressPercent() {
-        return (int) (consumedEnergy * 100 / ENERGY_PER_OPERATION);
+        return (int) (consumedEnergy * 100 / ModServerConfig.energyPerCompression());
     }
 
     public double getConsumedEnergy() {
@@ -93,7 +87,7 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
 
     /** AE drawn per tick with the currently installed acceleration cards. */
     public double getDrawPerTick() {
-        return BASE_DRAW_PER_TICK + DRAW_PER_CARD * upgrades.getInstalledUpgrades(AEItems.SPEED_CARD);
+        return ModServerConfig.compressorBaseDraw() + ModServerConfig.compressorDrawPerCard() * upgrades.getInstalledUpgrades(AEItems.SPEED_CARD);
     }
 
     private void onUpgradesChanged() {
@@ -108,14 +102,14 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
     @Override
     public void onChangeInventory(AppEngInternalInventory inv, int slot) {
         // Taking singularities out abandons the current compression; the energy spent so far is lost
-        if (inv == input && input.getStackInSlot(0).getCount() < SINGULARITIES_PER_OPERATION && consumedEnergy > 0) {
+        if (inv == input && input.getStackInSlot(0).getCount() < ModServerConfig.singularitiesPerCompression() && consumedEnergy > 0) {
             consumedEnergy = 0;
             saveChanges();
         }
     }
 
     private boolean canWork() {
-        if (input.getStackInSlot(0).getCount() < SINGULARITIES_PER_OPERATION) {
+        if (input.getStackInSlot(0).getCount() < ModServerConfig.singularitiesPerCompression()) {
             return false;
         }
         var result = new ItemStack(ModItems.COMPRESSED_SINGULARITY.get());
@@ -124,13 +118,17 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
 
     @Override
     public void serverTick() {
+        // Follows config changes made while the world is running
+        if (getInternalMaxPower() != getDrawPerTick() * BUFFER_TICKS) {
+            updateBufferSize();
+        }
         if (!canWork()) {
             FrameMachineBlock.setWorking(this, false);
             return;
         }
 
         // Use the internal buffer (filled by FE) first, then pull the rest from the ME network
-        var wanted = Math.min(getDrawPerTick(), ENERGY_PER_OPERATION - consumedEnergy);
+        var wanted = Math.min(getDrawPerTick(), ModServerConfig.energyPerCompression() - consumedEnergy);
         var got = extractAEPower(wanted, Actionable.MODULATE, PowerMultiplier.ONE);
         if (got < wanted) {
             var grid = getMainNode().getGrid();
@@ -145,9 +143,9 @@ public class SingularityCompressorBlockEntity extends AENetworkedPoweredBlockEnt
 
         FrameMachineBlock.setWorking(this, true);
         consumedEnergy += got;
-        if (consumedEnergy >= ENERGY_PER_OPERATION - 0.001) {
+        if (consumedEnergy >= ModServerConfig.energyPerCompression() - 0.001) {
             consumedEnergy = 0;
-            input.extractItem(0, SINGULARITIES_PER_OPERATION, false);
+            input.extractItem(0, ModServerConfig.singularitiesPerCompression(), false);
             output.insertItem(0, new ItemStack(ModItems.COMPRESSED_SINGULARITY.get()), false);
         }
         saveChanges();

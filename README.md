@@ -58,6 +58,42 @@ Items that differ from their default state (enchanted, renamed, damaged, filled 
 imprinted. This depends on the item's state rather than its type, so it is not part of the tag and cannot be turned off.
 It prevents duplicating the contents of containers.
 
+### Recipes
+
+All crafting recipes are regular datapack recipes in `data/applied_everything/recipe/`:
+`blank_infinity_cell`, `blank_infinity_fluid_cell`, `infinity_core`, `singularity_compressor`, `imprinter` and
+`infinity_energy_cell`. Override one by placing a file with the same name in your datapack, or remove it with:
+
+```json
+{
+  "neoforge:conditions": [{ "type": "neoforge:never" }]
+}
+```
+
+KubeJS and CraftTweaker work as with any other crafting recipe. The Singularity Compressor's process is not a
+recipe; change its cost in the server config below.
+
+### Server Config
+
+`config/applied_everything-server.toml` (or `serverconfig/applied_everything-server.toml` in a world folder, for that
+world only). On a server, the values are sent to the clients.
+
+| Key | Default | Meaning |
+|---|---|---|
+| `singularity_compressor.singularities_per_compression` | 9 | Singularities consumed by one compression (1-64) |
+| `singularity_compressor.energy_per_compression` | 10,000,000 | AE consumed by one compression |
+| `singularity_compressor.base_draw_per_tick` | 5,000 | AE per tick without Acceleration Cards |
+| `singularity_compressor.draw_per_card` | 5,000 | Additional AE per tick for each Acceleration Card (the total per compression stays the same) |
+| `infinity_imprinter.energy_per_imprint` | 100,000 | AE consumed by one imprint |
+| `infinity_imprinter.ticks_per_imprint` | 100 | Ticks one imprint takes |
+| `infinity_imprinter.energy_cell_charge_rate` | 50,000 | AE per tick pushed into an Infinity Energy Cell |
+| `infinity_energy_cell.capacity_fe` | 1,000,000,000 | FE needed before an Infinity Energy Cell becomes infinite |
+
+- The in-game guide always shows the default values.
+- Raising `capacity_fe` in an existing world makes full Infinity Energy Cells partly charged again: they stop supplying
+  FE until they are charged up to the new capacity. Lowering it is safe.
+- The number of Acceleration Cards (4) cannot be changed.
+
 ## License
 
 - Code: [MIT](LICENSE)

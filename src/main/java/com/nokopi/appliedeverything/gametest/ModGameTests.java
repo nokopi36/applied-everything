@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything.gametest;
 
+import com.nokopi.appliedeverything.ModServerConfig;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -182,7 +183,7 @@ public final class ModGameTests {
         helper.assertTrue(be.getCellSlot().getStackInSlot(0).is(ModItems.BLANK_INFINITY_CELL.get()), "Blank cell should be in the cell slot");
         helper.assertValueEqual(be.getItemSlot().getStackInSlot(0).getCount(), 3, "cobblestone in the item slot");
 
-        helper.assertValueEqual(ticksToImprint(be), ImprinterBlockEntity.TICKS_PER_IMPRINT, "ticks to imprint an item");
+        helper.assertValueEqual(ticksToImprint(be), ModServerConfig.ticksPerImprint(), "ticks to imprint an item");
         var cell = be.getOutputSlot().getStackInSlot(0);
         helper.assertValueEqual(InfinityCellItem.getImprintedItem(cell), AEItemKey.of(Items.COBBLESTONE), "imprinted item");
         helper.assertValueEqual(be.getItemSlot().getStackInSlot(0).getCount(), 2, "cobblestone left");
@@ -263,7 +264,7 @@ public final class ModGameTests {
         var energy = ItemAccess.forHandlerIndex(holder, 0).getCapability(Capabilities.Energy.ITEM);
         helper.assertTrue(energy != null, "The cell should accept FE");
         try (var tx = Transaction.openRoot()) {
-            helper.assertValueEqual(energy.insert(InfinityEnergyCellItem.CAPACITY_FE, tx), InfinityEnergyCellItem.CAPACITY_FE - 2_000, "FE accepted");
+            helper.assertValueEqual(energy.insert(ModServerConfig.energyCellCapacity(), tx), ModServerConfig.energyCellCapacity() - 2_000, "FE accepted");
             helper.assertValueEqual(energy.extract(1_000, tx), 0, "FE extracted");
             tx.commit();
         }
@@ -281,7 +282,7 @@ public final class ModGameTests {
         helper.setBlock(pos, ModBlocks.IMPRINTER.get());
         var be = helper.getBlockEntity(pos, ImprinterBlockEntity.class);
         var almostFull = new ItemStack(item);
-        almostFull.set(ModDataComponents.STORED_FE.get(), InfinityEnergyCellItem.CAPACITY_FE - 1_000);
+        almostFull.set(ModDataComponents.STORED_FE.get(), ModServerConfig.energyCellCapacity() - 1_000);
         helper.assertTrue(be.getCellSlot().insertItem(0, almostFull, false).isEmpty(), "Uncharged cells go into the cell slot");
         helper.assertValueEqual(ticksToImprint(be) > 0, true, "The imprinter should finish charging");
         helper.assertTrue(InfinityEnergyCellItem.isFullyCharged(be.getOutputSlot().getStackInSlot(0)), "The output should be full");
@@ -298,7 +299,7 @@ public final class ModGameTests {
         var data = new CompoundTag();
         MachineTooltips.compressorData(null, compressor, data);
         helper.assertTrue(data.isEmpty(), "No tooltip data for an idle compressor: " + data);
-        compressor.getInput().setItemDirect(0, AEItems.SINGULARITY.stack(SingularityCompressorBlockEntity.SINGULARITIES_PER_OPERATION));
+        compressor.getInput().setItemDirect(0, AEItems.SINGULARITY.stack(ModServerConfig.singularitiesPerCompression()));
         for (int i = 0; i < 400; i++) {
             compressor.injectAEPower(compressor.getInternalMaxPower(), Actionable.MODULATE);
             compressor.serverTick();
@@ -315,7 +316,7 @@ public final class ModGameTests {
         helper.assertTrue(data.isEmpty(), "No tooltip data for an idle imprinter: " + data);
         imprinter.getCellSlot().setItemDirect(0, new ItemStack(ModItems.BLANK_INFINITY_CELL.get()));
         imprinter.getItemSlot().setItemDirect(0, new ItemStack(Items.COBBLESTONE));
-        tickImprinter(imprinter, ImprinterBlockEntity.TICKS_PER_IMPRINT / 2);
+        tickImprinter(imprinter, ModServerConfig.ticksPerImprint() / 2);
         MachineTooltips.imprinterData(null, imprinter, data);
         helper.assertValueEqual(data.getStringOr(MachineTooltips.TAG_TARGET_ITEM, ""), "minecraft:cobblestone", "imprint target");
         helper.assertValueEqual(data.getIntOr(MachineTooltips.TAG_PROGRESS, -1), 50, "imprinter progress");
@@ -358,7 +359,7 @@ public final class ModGameTests {
         var pos = new BlockPos(0, 1, 0);
         helper.setBlock(pos, ModBlocks.SINGULARITY_COMPRESSOR.get());
         var be = helper.getBlockEntity(pos, SingularityCompressorBlockEntity.class);
-        var bufferSize = SingularityCompressorBlockEntity.BASE_DRAW_PER_TICK * SingularityCompressorBlockEntity.BUFFER_TICKS;
+        var bufferSize = ModServerConfig.compressorBaseDraw() * SingularityCompressorBlockEntity.BUFFER_TICKS;
         helper.assertValueEqual(be.getInternalMaxPower(), bufferSize, "buffer size");
 
         be.injectAEPower(5_000, Actionable.MODULATE);

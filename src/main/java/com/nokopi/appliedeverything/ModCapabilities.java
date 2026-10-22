@@ -32,7 +32,7 @@ public final class ModCapabilities {
         if (ModItems.INFINITY_ENERGY_CELL != null) {
             // Other mods' chargers fill the uncharged cell with FE; nothing can be taken back out
             event.registerItem(Capabilities.Energy.ITEM, (stack, access) -> new ItemAccessEnergyHandler(access,
-                    ModDataComponents.STORED_FE.get(), InfinityEnergyCellItem.CAPACITY_FE, InfinityEnergyCellItem.CAPACITY_FE, 0),
+                    ModDataComponents.STORED_FE.get(), ModServerConfig.energyCellCapacity(), ModServerConfig.energyCellCapacity(), 0),
                     ModItems.INFINITY_ENERGY_CELL.get());
         }
 

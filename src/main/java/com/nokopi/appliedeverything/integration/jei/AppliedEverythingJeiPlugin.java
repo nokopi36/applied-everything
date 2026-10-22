@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything.integration.jei;
 
+import com.nokopi.appliedeverything.ModServerConfig;
 import java.util.List;
 
 import com.nokopi.appliedeverything.AppliedEverything;
@@ -31,9 +32,9 @@ public class AppliedEverythingJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(CompressionCategory.RECIPE_TYPE, List.of(new CompressionRecipe(
-                AEItems.SINGULARITY.stack(SingularityCompressorBlockEntity.SINGULARITIES_PER_OPERATION),
+                AEItems.SINGULARITY.stack(ModServerConfig.singularitiesPerCompression()),
                 new ItemStack(ModItems.COMPRESSED_SINGULARITY.get()),
-                SingularityCompressorBlockEntity.ENERGY_PER_OPERATION)));
+                ModServerConfig.energyPerCompression())));
     }
 
     @Override

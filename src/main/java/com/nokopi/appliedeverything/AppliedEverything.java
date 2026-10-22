@@ -15,6 +15,7 @@ import appeng.core.definitions.AEItems;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @Mod(AppliedEverything.MODID)
@@ -30,6 +31,8 @@ public class AppliedEverything {
         ModMenus.MENU_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modEventBus);
         ModGameTests.TEST_FUNCTIONS.register(modEventBus);
+
+        modContainer.registerConfig(ModConfig.Type.SERVER, ModServerConfig.SPEC);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(AppFluxIntegration::addPacks);

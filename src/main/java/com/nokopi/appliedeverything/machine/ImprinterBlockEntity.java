@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything.machine;
 
+import com.nokopi.appliedeverything.ModServerConfig;
 import org.jetbrains.annotations.Nullable;
 
 import com.nokopi.appliedeverything.ModItems;
@@ -30,13 +31,9 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implements ServerTickingBlockEntity {
-    /** AE consumed by one imprint. */
-    public static final double ENERGY_PER_IMPRINT = 100_000;
-    /** Ticks one imprint takes when power keeps up. */
-    public static final int TICKS_PER_IMPRINT = 100;
-    public static final double DRAW_PER_TICK = ENERGY_PER_IMPRINT / TICKS_PER_IMPRINT;
-    /** AE per tick pushed into an Infinity Energy Cell being charged. */
-    public static final double CHARGE_RATE_AE = 50_000;
+    // AE and ticks per imprint and the charge rate are in ModServerConfig
+    /** The internal buffer holds this many ticks of the draw. */
+    private static final int BUFFER_TICKS = 2;
 
     private final AppEngInternalInventory cellSlot = new AppEngInternalInventory(this, 1, 1, new CellFilter());
     private final AppEngInternalInventory itemSlot = new AppEngInternalInventory(this, 1, 64, new ItemFilter());
@@ -53,7 +50,7 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
     public ImprinterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         this.getMainNode().setIdlePowerUsage(0);
-        this.setInternalMaxPower(DRAW_PER_TICK * 2);
+        this.setInternalMaxPower(drawPerTick() * BUFFER_TICKS);
     }
 
     public InternalInventory getCellSlot() {
@@ -76,6 +73,11 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
         return tank;
     }
 
+    /** AE drawn per tick while imprinting. */
+    public static double drawPerTick() {
+        return ModServerConfig.energyPerImprint() / ModServerConfig.ticksPerImprint();
+    }
+
     public double getConsumedEnergy() {
         return consumedEnergy;
     }
@@ -84,9 +86,9 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
     public int getProgressPercent() {
         var cell = cellSlot.getStackInSlot(0);
         if (isEnergyCell(cell)) {
-            return (int) ((long) InfinityEnergyCellItem.getStoredFe(cell) * 100 / InfinityEnergyCellItem.CAPACITY_FE);
+            return (int) ((long) InfinityEnergyCellItem.getStoredFe(cell) * 100 / ModServerConfig.energyCellCapacity());
         }
-        return (int) (consumedEnergy * 100 / ENERGY_PER_IMPRINT);
+        return (int) (consumedEnergy * 100 / ModServerConfig.energyPerImprint());
     }
 
     /** True while an Infinity Energy Cell sits in the cell slot to be charged. */
@@ -150,6 +152,10 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
 
     @Override
     public void serverTick() {
+        // Follows config changes made while the world is running
+        if (getInternalMaxPower() != drawPerTick() * BUFFER_TICKS) {
+            setInternalMaxPower(drawPerTick() * BUFFER_TICKS);
+        }
         emptyContainerIntoTank();
 
         if (isEnergyCell(cellSlot.getStackInSlot(0))) {
@@ -164,7 +170,7 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
             return;
         }
 
-        var wanted = Math.min(DRAW_PER_TICK, ENERGY_PER_IMPRINT - consumedEnergy);
+        var wanted = Math.min(drawPerTick(), ModServerConfig.energyPerImprint() - consumedEnergy);
         var got = extractAEPower(wanted, Actionable.MODULATE, PowerMultiplier.ONE);
         if (got < wanted) {
             var grid = getMainNode().getGrid();
@@ -178,7 +184,7 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
         }
 
         consumedEnergy += got;
-        if (consumedEnergy >= ENERGY_PER_IMPRINT - 0.001) {
+        if (consumedEnergy >= ModServerConfig.energyPerImprint() - 0.001) {
             consumedEnergy = 0;
             if (result.is(ModItems.INFINITY_FLUID_CELL.get())) {
                 tank.setStack(0, null);
@@ -203,8 +209,8 @@ public class ImprinterBlockEntity extends AENetworkedPoweredBlockEntity implemen
             }
             return;
         }
-        var missingAe = (InfinityEnergyCellItem.CAPACITY_FE - InfinityEnergyCellItem.getStoredFe(cell)) / InfinityEnergyCellItem.FE_PER_AE;
-        var wanted = Math.min(CHARGE_RATE_AE, missingAe);
+        var missingAe = (ModServerConfig.energyCellCapacity() - InfinityEnergyCellItem.getStoredFe(cell)) / InfinityEnergyCellItem.FE_PER_AE;
+        var wanted = Math.min(ModServerConfig.energyCellChargeRate(), missingAe);
         var got = extractAEPower(wanted, Actionable.MODULATE, PowerMultiplier.ONE);
         if (got < wanted) {
             var grid = getMainNode().getGrid();

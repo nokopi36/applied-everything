@@ -1,5 +1,6 @@
 package com.nokopi.appliedeverything.integration.appflux;
 
+import com.nokopi.appliedeverything.ModServerConfig;
 import java.util.function.Consumer;
 
 import org.jetbrains.annotations.Nullable;
@@ -24,8 +25,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
  * is installed.
  */
 public class InfinityEnergyCellItem extends Item implements ImprintedCell, IAEItemPowerStorage {
-    /** FE needed before the cell becomes infinite. */
-    public static final int CAPACITY_FE = 1_000_000_000;
+    // The FE needed before the cell becomes infinite is in ModServerConfig
     /** AE2's default exchange rate: 1 AE = 2 FE. */
     public static final double FE_PER_AE = 2;
     /** AE per tick the cell takes from AE2's charger. */
@@ -43,13 +43,13 @@ public class InfinityEnergyCellItem extends Item implements ImprintedCell, IAEIt
     }
 
     public static boolean isFullyCharged(ItemStack stack) {
-        return getStoredFe(stack) >= CAPACITY_FE;
+        return getStoredFe(stack) >= ModServerConfig.energyCellCapacity();
     }
 
     /** Adds FE to the cell and returns how much was taken. */
     public static int charge(ItemStack stack, long fe, boolean simulate) {
         int stored = getStoredFe(stack);
-        int taken = (int) Math.min(fe, (long) CAPACITY_FE - stored);
+        int taken = (int) Math.min(fe, (long) ModServerConfig.energyCellCapacity() - stored);
         if (taken > 0 && !simulate) {
             stack.set(ModDataComponents.STORED_FE.get(), stored + taken);
         }
@@ -67,7 +67,7 @@ public class InfinityEnergyCellItem extends Item implements ImprintedCell, IAEIt
         if (isFullyCharged(stack)) {
             return super.getName(stack);
         }
-        long percent = (long) getStoredFe(stack) * 100 / CAPACITY_FE;
+        long percent = (long) getStoredFe(stack) * 100 / ModServerConfig.energyCellCapacity();
         return Component.translatable(CHARGING_NAME_KEY, super.getName(stack), percent);
     }
 
@@ -79,7 +79,7 @@ public class InfinityEnergyCellItem extends Item implements ImprintedCell, IAEIt
             return;
         }
         lines.accept(Component.translatable(TOOLTIP_CHARGE_KEY, String.format("%,d", getStoredFe(stack)),
-                String.format("%,d", CAPACITY_FE)).withStyle(ChatFormatting.YELLOW));
+                String.format("%,d", ModServerConfig.energyCellCapacity())).withStyle(ChatFormatting.YELLOW));
     }
 
     // --- AE2's charger -------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ public class InfinityEnergyCellItem extends Item implements ImprintedCell, IAEIt
 
     @Override
     public double getAEMaxPower(ItemStack stack) {
-        return CAPACITY_FE / FE_PER_AE;
+        return ModServerConfig.energyCellCapacity() / FE_PER_AE;
     }
 
     @Override

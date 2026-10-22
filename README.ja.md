@@ -58,6 +58,42 @@ NeoForge の `remove` で初期値を外します。
 通常の状態から変わっているアイテム（エンチャント、名前付き、耐久が減ったもの、中身入りの容器など）は、常に刻印できません。
 アイテムの種類ではなく状態で決まるのでタグには含まれず、解除もできません。容器の中身を増やすバグ技を防ぐためです。
 
+### レシピ
+
+作業台のレシピはすべて、`data/applied_everything/recipe/` にある普通のデータパックのレシピです。
+`blank_infinity_cell`、`blank_infinity_fluid_cell`、`infinity_core`、`singularity_compressor`、`imprinter`、
+`infinity_energy_cell` があります。データパックに同じ名前のファイルを置くと上書きでき、次の内容にすると削除できます。
+
+```json
+{
+  "neoforge:conditions": [{ "type": "neoforge:never" }]
+}
+```
+
+KubeJS や CraftTweaker でも、ほかの作業台のレシピと同じように変更できます。特異点圧縮機の処理はレシピではないので、
+コストは下のサーバー設定で変えてください。
+
+### サーバー設定
+
+`config/applied_everything-server.toml` で変更できます。ワールドのフォルダの `serverconfig/applied_everything-server.toml`
+に置くと、そのワールドだけに効きます。サーバーでは、値がクライアントにも送られます。
+
+| 項目 | 初期値 | 意味 |
+|---|---|---|
+| `singularity_compressor.singularities_per_compression` | 9 | 圧縮 1 回に使う特異点の数（1〜64） |
+| `singularity_compressor.energy_per_compression` | 10,000,000 | 圧縮 1 回の AE |
+| `singularity_compressor.base_draw_per_tick` | 5,000 | 加速カードなしの 1 ティックの AE |
+| `singularity_compressor.draw_per_card` | 5,000 | 加速カード 1 枚で増える 1 ティックの AE（圧縮 1 回の合計は変わらない） |
+| `infinity_imprinter.energy_per_imprint` | 100,000 | 刻印 1 回の AE |
+| `infinity_imprinter.ticks_per_imprint` | 100 | 刻印 1 回にかかるティック |
+| `infinity_imprinter.energy_cell_charge_rate` | 50,000 | 無限エネルギーセルを充電する 1 ティックの AE |
+| `infinity_energy_cell.capacity_fe` | 1,000,000,000 | 無限エネルギーセルが無限になるまでに必要な FE |
+
+- ゲーム内のガイドには、常に初期値が表示されます。
+- 途中のワールドで `capacity_fe` を上げると、満タンだった無限エネルギーセルが満タンでなくなり、新しい容量まで充電し直すまで
+  FE を供給しなくなります。下げる分には問題ありません。
+- 加速カードの最大数（4 枚）は変えられません。
+
 ## ライセンス
 
 - コード: [MIT](LICENSE)
