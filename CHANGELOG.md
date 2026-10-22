@@ -4,7 +4,7 @@
 
 ## 1.1.0 - Minecraft 26.1.2
 
-- Server config for the machine costs and the Infinity Energy Cell capacity
+- Server config for the Singularity Compressor and Infinity Imprinter (energy, speed and singularities per compression) and the Infinity Energy Cell capacity
 
 ## 1.0.0 - Minecraft 26.1.2
 

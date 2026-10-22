@@ -72,7 +72,7 @@ All crafting recipes are regular datapack recipes in `data/applied_everything/re
 ```
 
 KubeJS and CraftTweaker work as with any other crafting recipe. The Singularity Compressor's process is not a
-recipe; change its cost in the server config below.
+recipe; change its energy, speed and singularities per compression in the server config below.
 
 ### Server Config
 
